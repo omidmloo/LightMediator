@@ -9,17 +9,4 @@ Windows Service Mediator is a .NET-based framework designed to simplify the crea
 - **Extensibility:** Easily extend the framework to handle custom operations.
 - **Decoupled Architecture:** Promotes a clean and maintainable codebase.
 
-## Getting Started
-
-### Prerequisites
-
-- **.NET SDK:** Version 6.0 or higher.
-- **Windows Operating System:** Required for running Windows Services.
-
-### Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/MahmoodMalekloo/WindowsServiceMediator.git
-cd WindowsServiceMediator
+ 
