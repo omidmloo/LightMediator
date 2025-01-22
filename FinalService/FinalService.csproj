@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mediator\AppMediator.csproj" />
-    <ProjectReference Include="..\ServiceA\ServiceA.BackService.csproj" />
+    <ProjectReference Include="..\ServiceA.BackService\ServiceA.BackService.csproj" />
     <ProjectReference Include="..\ServiceB.BackService\ServiceB.BackService.csproj" />
     <ProjectReference Include="..\ServiceC.BackService\ServiceC.BackService.csproj" />
   </ItemGroup>

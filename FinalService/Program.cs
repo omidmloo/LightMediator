@@ -3,7 +3,7 @@ using System.Reflection;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
-builder.Services.AddEnfortXMediator();
+builder.Services.AddAppMediator();
 builder.Services.RegisterNotificationsFromAssemblies(
                                 Assembly.GetExecutingAssembly(),
                                  ServiceA.BackService.Extensions.ServiceExtensions.GetServiceAssembly(),
