@@ -7,7 +7,7 @@ global using Microsoft.Extensions.Logging;
 
 global using Newtonsoft.Json;
 
-global using AppMediator;
+global using LightMediator;
  
 global using ServiceB.BackService.Services;
 global using ServiceB.BackService.Application.NotificationHandlers;

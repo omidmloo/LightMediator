@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace AppMediator;
+namespace LightMediator;
 internal class Mediator : IMediator
 {
     private readonly ILogger<Mediator> _logger;
-    private readonly AppMediatorOptions _mediatorOptions;
+    private readonly LightMediatorOptions _mediatorOptions;
     public IEnumerable<INotificationHandler> registeredServices { get; } = new List<INotificationHandler>();
-    public Mediator(IServiceProvider serviceProvider, ILogger<Mediator> logger, AppMediatorOptions mediatorOptions)
+    public Mediator(IServiceProvider serviceProvider, ILogger<Mediator> logger, LightMediatorOptions mediatorOptions)
     {
         registeredServices = serviceProvider.GetServices<INotificationHandler>();
         _logger = logger;

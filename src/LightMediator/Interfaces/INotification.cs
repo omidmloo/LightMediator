@@ -1,6 +1,6 @@
 ﻿
 
-namespace AppMediator;
+namespace LightMediator;
 
 public interface INotification
 { 

@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-FinalService-2a51de87-ed0a-47d3-b72e-d5de58a5f0e2</UserSecretsId>
+	  <OutputPath>bin\Debug\</OutputPath>
+	  <IntermediateOutputPath>obj\</IntermediateOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mediator\AppMediator.csproj" />
+    <ProjectReference Include="..\..\LightMediator\LightMediator.csproj" />
     <ProjectReference Include="..\ServiceA.BackService\ServiceA.BackService.csproj" />
     <ProjectReference Include="..\ServiceB.BackService\ServiceB.BackService.csproj" />
     <ProjectReference Include="..\ServiceC.BackService\ServiceC.BackService.csproj" />

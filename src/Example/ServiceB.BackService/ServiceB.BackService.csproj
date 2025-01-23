@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <OutputPath>bin\Debug\</OutputPath>
+	  <IntermediateOutputPath>obj\</IntermediateOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mediator\AppMediator.csproj" />
+    <ProjectReference Include="..\..\LightMediator\LightMediator.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 
-namespace AppMediator;
+namespace LightMediator;
 
 // Options class for configuring mediator services
-public class AppMediatorOptions
+public class LightMediatorOptions
 {
     public bool IgnoreNamespaceInAssemblies { get; set; }
     public bool RegisterNotificationsByAssembly { get; set; } = true;

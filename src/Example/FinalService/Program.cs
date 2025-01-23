@@ -3,7 +3,7 @@ builder.Services.AddHostedService<Worker>();
 
 
 // Add Mediator to the Dependency Injection container
-builder.Services.AddAppMediator(options =>
+builder.Services.AddLightMediator(options =>
 {
     // Configure options for the mediator
     options.IgnoreNamespaceInAssemblies = true;

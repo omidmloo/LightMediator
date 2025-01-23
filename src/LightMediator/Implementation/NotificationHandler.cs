@@ -1,5 +1,5 @@
 ﻿
-namespace AppMediator;
+namespace LightMediator;
 
 public abstract class NotificationHandler<TNotification> : INotificationHandler where TNotification : class, INotification
 {

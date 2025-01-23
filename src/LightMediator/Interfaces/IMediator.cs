@@ -1,4 +1,4 @@
-﻿namespace AppMediator;
+﻿namespace LightMediator;
 
 public interface IMediator
 { 

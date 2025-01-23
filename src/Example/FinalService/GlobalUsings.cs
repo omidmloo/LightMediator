@@ -2,7 +2,7 @@
 
 global using Microsoft.Extensions.Hosting; 
 global using Microsoft.Extensions.DependencyInjection;
-global using AppMediator;
+global using LightMediator;
 
 global using FinalService;
 global using FinalService.Application;

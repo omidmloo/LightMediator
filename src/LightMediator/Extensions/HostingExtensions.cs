@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace AppMediator;
+namespace LightMediator;
 
 public static class HostingExtensions
 {
-    public static IServiceCollection AddAppMediator(this IServiceCollection services, Action<AppMediatorOptions> configureOptions)
+    public static IServiceCollection AddLightMediator(this IServiceCollection services, Action<LightMediatorOptions> configureOptions)
     {
-        var options = new AppMediatorOptions();
+        var options = new LightMediatorOptions();
         configureOptions?.Invoke(options);
 
-        services.AddSingleton<AppMediatorOptions>(options);
+        services.AddSingleton<LightMediatorOptions>(options);
         // Register the mediator
         services.TryAddSingleton<IMediator, Mediator>();
 
