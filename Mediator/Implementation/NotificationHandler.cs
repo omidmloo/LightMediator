@@ -11,9 +11,23 @@ public abstract class NotificationHandler<TNotification> : INotificationHandler 
     }
 
     public Task HandleNotification(object message, CancellationToken? cancellationToken = null)
-    {
+    { 
         var json = JsonConvert.SerializeObject(message);
-        return Handle(JsonConvert.DeserializeObject<TNotification>(json), cancellationToken);
+        var sourceFields = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+         
+        var targetFields = Activator.CreateInstance(typeof(TNotification));
+        var targetProperties = typeof(TNotification).GetProperties();
+
+        foreach (var property in targetProperties)
+        {
+            if (sourceFields.ContainsKey(property.Name) && property.CanWrite)
+            {
+                var value = sourceFields[property.Name];
+                property.SetValue(targetFields, Convert.ChangeType(value, property.PropertyType));
+            }
+        }
+
+        return Handle((TNotification)targetFields, cancellationToken);
     }
 
     public virtual async Task Handle(TNotification message, CancellationToken? cancellationToken)

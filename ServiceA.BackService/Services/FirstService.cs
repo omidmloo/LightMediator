@@ -23,7 +23,8 @@ public class FirstService : BackgroundService
             {
                 NewAppInfoNotification newAppInfo = new NewAppInfoNotification()
                 {
-                    Title = "NewApp"
+                    Title = "NewApp",
+                    Description = "Des"
                 };
                 using (var scope = _serviceProvider.CreateScope())
                 {
