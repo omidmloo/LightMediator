@@ -5,27 +5,39 @@ namespace AppMediator;
 
 public static class HostingExtensions
 {
-    public static IServiceCollection AddAppMediator(this IServiceCollection services)
+    public static IServiceCollection AddAppMediator(this IServiceCollection services, Action<AppMediatorOptions>? configureOptions = null)
     {
-        services.TryAddSingleton<IMediator, Mediator>(); 
-        return services;
-    } 
-    public static IServiceCollection RegisterNotificationsFromAssemblies(this IServiceCollection services, params Assembly[] assemblies)
-    {
-        foreach (var assembly in assemblies)
-        { 
-            var handlerTypes = assembly.GetTypes()
-                .Where(type => !type.IsAbstract && !type.IsInterface)  
-                .Where(type => type.BaseType != null
-                               && type.BaseType.IsGenericType
-                               && type.BaseType.GetGenericTypeDefinition() == typeof(NotificationHandler<>))  
-                .ToList();
+        var options = new AppMediatorOptions();
+        configureOptions?.Invoke(options);
 
-            foreach (var handlerType in handlerTypes)
-            { 
-                    services.AddSingleton(typeof(INotificationHandler), handlerType); 
+        // Register the mediator
+        services.TryAddSingleton<IMediator, Mediator>();
+
+        // Conditionally register notification handlers if assemblies are provided
+        if (options.RegisterNotificationsByAssembly && options.Assemblies?.Any() == true)
+        {
+            foreach (var assembly in options.Assemblies)
+            {
+                var handlerTypes = assembly.GetTypes()
+                    .Where(type => !type.IsAbstract && !type.IsInterface)
+                    .Where(type => type.BaseType != null
+                                   && type.BaseType.IsGenericType
+                                   && type.BaseType.GetGenericTypeDefinition() == typeof(NotificationHandler<>))
+                    .ToList();
+
+                foreach (var handlerType in handlerTypes)
+                {
+                    services.AddSingleton(typeof(INotificationHandler), handlerType);
+                }
             }
         }
+
         return services;
     }
+}
+// Options class for configuring mediator services
+public class AppMediatorOptions
+{
+    public bool RegisterNotificationsByAssembly { get; set; } = true;
+    public Assembly[] Assemblies { get; set; } = Array.Empty<Assembly>();
 }
