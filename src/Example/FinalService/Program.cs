@@ -19,7 +19,7 @@ builder.Services.AddLightMediator(options =>
     };
 });
 
-// Use hosting extension of services to configure it
+// Use hosting extension of services to configure 
 builder.Services.AddServiceA();
 builder.Services.AddServiceB();
 builder.Services.AddServiceC();
