@@ -1,18 +1,23 @@
-using ServiceC.BackService.Application;
-using System.Reflection;
-
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
 
-// Add mediator to dc
+
+// Add Mediator to the Dependency Injection container
 builder.Services.AddAppMediator(options =>
 {
-    options.RegisterNotificationsByAssembly = true;
-    options.Assemblies =  new[] { Assembly.GetExecutingAssembly(),
-                            ServiceA.BackService.Extensions.ServiceExtensions.GetServiceAssembly(),
-                            ServiceB.BackService.Extensions.ServiceExtensions.GetServiceAssembly(),
-                            ServiceC.BackService.Extensions.ServiceExtensions.GetServiceAssembly() };
-});  
+    // Configure options for the mediator
+    options.IgnoreNamespaceInAssemblies = true;
+    options.RegisterNotificationsByAssembly = true; 
+
+    // specify the assemblies to scan for notifications
+    options.Assemblies = new[]
+    {
+        Assembly.GetExecutingAssembly(),
+        ServiceA.BackService.Extensions.ServiceExtensions.GetServiceAssembly(),
+        ServiceB.BackService.Extensions.ServiceExtensions.GetServiceAssembly(),
+        ServiceC.BackService.Extensions.ServiceExtensions.GetServiceAssembly()
+    };
+});
 
 // Use hosting extension of services to configure it
 builder.Services.AddServiceA();

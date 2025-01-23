@@ -1,17 +1,19 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
-using System.Reflection;
 
 namespace AppMediator;
 
 public static class HostingExtensions
 {
-    public static IServiceCollection AddAppMediator(this IServiceCollection services, Action<AppMediatorOptions>? configureOptions = null)
+    public static IServiceCollection AddAppMediator(this IServiceCollection services, Action<AppMediatorOptions> configureOptions)
     {
         var options = new AppMediatorOptions();
         configureOptions?.Invoke(options);
 
+        services.AddSingleton<AppMediatorOptions>(options);
         // Register the mediator
         services.TryAddSingleton<IMediator, Mediator>();
+
+
 
         // Conditionally register notification handlers if assemblies are provided
         if (options.RegisterNotificationsByAssembly && options.Assemblies?.Any() == true)
@@ -34,10 +36,4 @@ public static class HostingExtensions
 
         return services;
     }
-}
-// Options class for configuring mediator services
-public class AppMediatorOptions
-{
-    public bool RegisterNotificationsByAssembly { get; set; } = true;
-    public Assembly[] Assemblies { get; set; } = Array.Empty<Assembly>();
 }

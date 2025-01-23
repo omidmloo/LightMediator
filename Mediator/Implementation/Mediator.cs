@@ -4,35 +4,38 @@ namespace AppMediator;
 internal class Mediator : IMediator
 {
     private readonly ILogger<Mediator> _logger;
+    private readonly AppMediatorOptions _mediatorOptions;
     public IEnumerable<INotificationHandler> registeredServices { get; } = new List<INotificationHandler>();
-    public Mediator(IServiceProvider serviceProvider, ILogger<Mediator> logger)
+    public Mediator(IServiceProvider serviceProvider, ILogger<Mediator> logger, AppMediatorOptions mediatorOptions)
     {
         registeredServices = serviceProvider.GetServices<INotificationHandler>();
         _logger = logger;
+        _mediatorOptions = mediatorOptions;
     }
     public Task Publish(INotification notification, CancellationToken? cancellationToken = null)
     {
-        var eventName = notification.GetType().Name;
-        if (registeredServices.Any(c => c.NotificationName.Equals(eventName, StringComparison.OrdinalIgnoreCase)))
+        var eventName = _mediatorOptions.IgnoreNamespaceInAssemblies
+        ? notification.GetType().Name
+        : notification.GetType().FullName;
+
+        var matchingHandlers = registeredServices
+            .Where(c => c.NotificationName.Equals(eventName, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        foreach (var handler in matchingHandlers)
         {
-            var handlers = registeredServices.Where(c => c.NotificationName.Equals(eventName, StringComparison.OrdinalIgnoreCase))
-                            .ToList();
-            foreach (var handler in handlers)
+            _ = Task.Run(async () =>
             {
-                _ = Task.Run(async () =>
+                try
                 {
-                    try
-                    {
-                        await handler.HandleNotification(notification, cancellationToken);
-                    }
-                    catch (Exception ex)
-                    { 
-                        _logger.LogError($"Error in handler: {ex.Message}");
-                    }
-                });
-                 
-            }
-        }
+                    await handler.HandleNotification(notification, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error in handler: {ex.Message}");
+                }
+            });
+        } 
         return Task.CompletedTask;
     }
 }
