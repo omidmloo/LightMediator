@@ -10,11 +10,9 @@ internal class Mediator : IMediator
         registeredServices = serviceProvider.GetServices<INotificationHandler>();
         _logger = logger;
     }
-    public async Task Publish(INotification notification, CancellationToken? cancellationToken = null)
+    public Task Publish(INotification notification, CancellationToken? cancellationToken = null)
     {
         var eventName = notification.GetType().Name;
-        /// Get all event handlers registered by the event name of notification
-        /// Raise handle for all handlers
         if (registeredServices.Any(c => c.NotificationName.Equals(eventName, StringComparison.OrdinalIgnoreCase)))
         {
             var handlers = registeredServices.Where(c => c.NotificationName.Equals(eventName, StringComparison.OrdinalIgnoreCase))
@@ -35,5 +33,6 @@ internal class Mediator : IMediator
                  
             }
         }
+        return Task.CompletedTask;
     }
 }
