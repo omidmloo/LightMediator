@@ -21,7 +21,10 @@
 			- Lightweight and fast for Windows services
 			- Supports multiple notification types
 			- Simplifies decoupled communication
-		</PackageReleaseNotes>  
+		</PackageReleaseNotes>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<License>MIT</License>
+		<PackageReadmeFile>README.md</PackageReadmeFile> 
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -33,6 +36,8 @@
 
 
 	<ItemGroup>
+		<None Include="LICENSE" Pack="true" PackagePath=""/>
+		<None Include="README.md" Pack="true" PackagePath=""/>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
