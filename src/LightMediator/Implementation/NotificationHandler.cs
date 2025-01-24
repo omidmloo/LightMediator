@@ -30,8 +30,5 @@ public abstract class NotificationHandler<TNotification> : INotificationHandler 
         return Handle((TNotification)targetFields, cancellationToken);
     }
 
-    public virtual async Task Handle(TNotification message, CancellationToken? cancellationToken)
-    {
-        Console.WriteLine(message.ToString());
-    }
+    public abstract Task Handle(TNotification message, CancellationToken? cancellationToken);
 }
