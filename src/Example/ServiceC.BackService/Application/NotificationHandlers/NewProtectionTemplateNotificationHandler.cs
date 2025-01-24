@@ -4,7 +4,7 @@ public class NewProtectionTemplateNotificationHandler : NotificationHandler<NewP
 {
     private readonly ILogger<NewProtectionTemplateNotificationHandler> _logger; 
 
-    public NewProtectionTemplateNotificationHandler(ILogger<NewProtectionTemplateNotificationHandler> logger)  
+    public NewProtectionTemplateNotificationHandler(ILogger<NewProtectionTemplateNotificationHandler> logger, LightMediatorOptions mediatorOptions) : base(mediatorOptions)
     {
         _logger = logger; 
     }

@@ -7,6 +7,7 @@ builder.Services.AddLightMediator(options =>
 {
     // Configure options for the mediator
     options.IgnoreNamespaceInAssemblies = true;
+    options.IgnoreNotificationDifferences = true;
     options.RegisterNotificationsByAssembly = true; 
 
     // specify the assemblies to scan for notifications

@@ -4,7 +4,7 @@ public class NewAppInfoNotificationHandler : NotificationHandler<NewAppInfoNotif
 {
     private readonly ILogger<NewAppInfoNotificationHandler> _logger; 
 
-    public NewAppInfoNotificationHandler(ILogger<NewAppInfoNotificationHandler> logger)  
+    public NewAppInfoNotificationHandler(ILogger<NewAppInfoNotificationHandler> logger, LightMediatorOptions mediatorOptions) : base(mediatorOptions)
     {
         _logger = logger; 
     }
