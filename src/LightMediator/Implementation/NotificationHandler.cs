@@ -20,14 +20,14 @@ public abstract class NotificationHandler<TNotification> : INotificationHandler 
 
         foreach (var property in targetProperties)
         {
-            if (sourceFields.ContainsKey(property.Name) && property.CanWrite)
+            if (sourceFields!.ContainsKey(property.Name) && property.CanWrite)
             {
                 var value = sourceFields[property.Name];
                 property.SetValue(targetFields, Convert.ChangeType(value, property.PropertyType));
             }
         }
 
-        return Handle((TNotification)targetFields, cancellationToken);
+        return Handle((TNotification)targetFields!, cancellationToken);
     }
 
     public abstract Task Handle(TNotification message, CancellationToken? cancellationToken);
