@@ -6,6 +6,7 @@ public abstract class NotificationHandler<TNotification> : INotificationHandler 
     public string NotificationName { get; }
     private readonly LightMediatorOptions _mediatorOptions;
 
+
     protected NotificationHandler(LightMediatorOptions mediatorOptions)
     {
         NotificationName = typeof(TNotification).Name;

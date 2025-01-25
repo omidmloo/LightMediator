@@ -4,14 +4,29 @@ namespace LightMediator;
 
 public static class HostingExtensions
 {
-    public static IServiceCollection AddLightMediator(this IServiceCollection services, Action<LightMediatorOptions> configureOptions)
+    public static IServiceCollection AddLightMediator(
+        this IServiceCollection services, 
+        Action<LightMediatorOptions> configureOptions,
+        ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
     {
         var options = new LightMediatorOptions();
         configureOptions?.Invoke(options);
 
-        services.AddSingleton<LightMediatorOptions>(options);
         // Register the mediator
-        services.TryAddSingleton<IMediator, Mediator>();
+       
+        if(serviceLifetime == ServiceLifetime.Scoped)
+        {
+            services.AddScoped(o =>
+            {
+                return options;
+            });
+            services.TryAddScoped<IMediator, Mediator>();
+        }
+        else
+        {
+            services.AddSingleton(options);
+            services.TryAddSingleton<IMediator, Mediator>();
+        }
 
 
 
@@ -29,11 +44,21 @@ public static class HostingExtensions
 
                 foreach (var handlerType in handlerTypes)
                 {
-                    services.AddSingleton(typeof(INotificationHandler), handlerType);
+
+                    if (serviceLifetime == ServiceLifetime.Scoped)
+                    {
+                        services.AddScoped(typeof(INotificationHandler), handlerType);
+                    }
+                    else
+                    {
+                        services.AddSingleton(typeof(INotificationHandler), handlerType);
+                    }
+
                 }
             }
         }
 
         return services;
     }
+  
 }
