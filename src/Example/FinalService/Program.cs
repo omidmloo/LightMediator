@@ -8,15 +8,16 @@ builder.Services.AddLightMediator(options =>
     // Configure options for the mediator
     options.IgnoreNamespaceInAssemblies = true;
     options.IgnoreNotificationDifferences = true;
-    options.RegisterNotificationsByAssembly = true; 
+    options.RegisterNotificationsByAssembly = true;
+    options.RegisterRequestsByAssembly = true;
 
     // specify the assemblies to scan for notifications
     options.Assemblies = new[]
     {
         Assembly.GetExecutingAssembly(),
-        ServiceA.BackService.Extensions.ServiceExtensions.GetServiceAssembly(),
-        ServiceB.BackService.Extensions.ServiceExtensions.GetServiceAssembly(),
-        ServiceC.BackService.Extensions.ServiceExtensions.GetServiceAssembly()
+        ServiceAExtensions.GetServiceAssembly(),
+        ServiceBExtensions.GetServiceAssembly(),
+        ServiceCExtensions.GetServiceAssembly()
     };
 });
 

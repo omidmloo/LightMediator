@@ -27,6 +27,8 @@ public abstract class NotificationHandler<TNotification> : INotificationHandler 
         {
             throw new NullReferenceException($"Source notification has not property");
         }
+        if (sourceFields == null)
+            throw new ArgumentNullException();
 
         if (!_mediatorOptions.IgnoreNotificationDifferences && 
             sourceFields.Any(s => !targetProperties.Any(t => t.Name == s.Key)))

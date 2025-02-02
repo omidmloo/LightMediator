@@ -1,10 +1,9 @@
 ﻿
-
 using System.Reflection;
 
-namespace ServiceA.BackService.Extensions;
+namespace ServiceB.BackService.Extensions;
 
-public static class ServiceExtensions
+public static class ServiceBExtensions
 {
     public static Assembly GetServiceAssembly()
     {
