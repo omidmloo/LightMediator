@@ -67,7 +67,7 @@ A command handler is a class that implements the `IRequestHandler<TRequest, TRes
 public class TestCommandHandler : RequestHandler<TestCommand, TestCommandResponse>
 {
     private readonly ILogger<TestCommandResponseHandler> _logger;
-    public TestCommandHandler(LightMediatorOptions mediatorOptions, ILogger<TestCommandResponseHandler> logger) : base(mediatorOptions)
+    public TestCommandHandler(ILogger<TestCommandResponseHandler> logger)
     {
       _logger = logger;
     }
