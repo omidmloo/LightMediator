@@ -44,12 +44,10 @@ public abstract class RequestHandler<TRequest> : IRequestHandler<TRequest> where
 
 public abstract class RequestHandler<TRequest,TResposne> : IRequestHandler<TRequest, TResposne> where TRequest : IRequest<TResposne>
 {
-    public string RequestName { get; }
-    private readonly LightMediatorOptions _mediatorOptions;
-    protected RequestHandler(LightMediatorOptions mediatorOptions)
+    public string RequestName { get; } 
+    protected RequestHandler()
     {
-        RequestName = typeof(TRequest).Name;
-        _mediatorOptions = mediatorOptions;
+        RequestName = typeof(TRequest).Name; 
     }
 
     public Task<TResposne> HandleRequest(object request, LightMediatorOptions mediatorOptions, CancellationToken? cancellationToken)
@@ -73,7 +71,7 @@ public abstract class RequestHandler<TRequest,TResposne> : IRequestHandler<TRequ
                 var value = sourceFields[property.Name];
                 property.SetValue(targetFields, Convert.ChangeType(value, property.PropertyType));
             }
-            else if (!_mediatorOptions.IgnoreNotificationDifferences)
+            else if (!mediatorOptions.IgnoreNotificationDifferences)
             {
                 throw new InvalidCastException($"Cannot cast {RequestName}");
             }

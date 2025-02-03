@@ -20,11 +20,12 @@ namespace FinalService
                     Description = "Test",
                 });
 
-                var res = await _mediator.Send<bool>(new TestCommandResponse()
-                {
-                    Title = "Test",
-                    Description = "Test",
-                });
+                var res = await _mediator.Send<TestCommandResponse>(
+                    new TestCommandWithResponse()
+                        {
+                            Title = "Test",
+                            Description = "Test",
+                        });
 
                 if (_logger.IsEnabled(LogLevel.Information))
                 {

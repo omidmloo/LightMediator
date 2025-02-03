@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Reflection;
 
 namespace LightMediator;
 internal class Mediator : IMediator
@@ -32,7 +33,7 @@ internal class Mediator : IMediator
             {
                 try
                 {
-                    await handler.HandleNotification(notification,_mediatorOptions, cancellationToken);
+                    await handler.HandleNotification(notification, _mediatorOptions, cancellationToken);
                 }
                 catch (Exception ex)
                 {
@@ -71,13 +72,15 @@ internal class Mediator : IMediator
         {
             var handlerType = typeof(IRequestHandler<>).MakeGenericType(requestType);
             if (handlerType != null)
-            { 
+            {
                 var handler = scope.ServiceProvider.GetService(handlerType);
 
                 if (handler != null)
                 {
                     var handleMethod = handlerType.GetMethod("HandleRequest");
                     var requestInstance = Activator.CreateInstance(requestType);
+                    if (requestInstance == null)
+                        throw new ArgumentNullException("request is null");
                     var task = (Task)handleMethod!.Invoke(handler, new object[] { requestInstance, _mediatorOptions, CancellationToken.None })!;
 
                     await task; // Ensure async execution
@@ -85,8 +88,8 @@ internal class Mediator : IMediator
                 }
             }
         }
-  }
-     
+    }
+
     public async Task<TResponse?> Send<TResponse>(IRequest<TResponse> request, CancellationToken? cancellationToken = null)
     {
         if (request == null)
@@ -113,7 +116,10 @@ internal class Mediator : IMediator
         using var scope = _serviceProvider.CreateScope();
         foreach (Type requestType in requestTypes)
         {
-            var handlerType = typeof(IRequestHandler<,>).MakeGenericType(requestType,typeof(TResponse));
+            Type? responseType = requestType.GetInterfaces()!.FirstOrDefault()!.GetGenericArguments()!.FirstOrDefault();
+            if (responseType == null)
+                continue;
+            var handlerType = typeof(IRequestHandler<,>).MakeGenericType(requestType, responseType);
             if (handlerType != null)
             {
                 var handler = scope.ServiceProvider.GetService(handlerType);
@@ -122,12 +128,26 @@ internal class Mediator : IMediator
                 {
                     var handleMethod = handlerType.GetMethod("HandleRequest");
                     var requestInstance = Activator.CreateInstance(requestType);
-                    var task = (Task<TResponse>)handleMethod!.Invoke(handler, new object[] { requestInstance, _mediatorOptions, CancellationToken.None })!;
+                    if (requestInstance == null)
+                        throw new ArgumentNullException("request is null");
 
-                    return await task;  
+                    var task = (Task)handleMethod!.Invoke(handler, new object[] { requestInstance, _mediatorOptions, CancellationToken.None })!;
+                     
+                    object result = await ConvertToGenericTask(task, responseType);
+
+                    return JsonConvert.DeserializeObject<TResponse>(JsonConvert.SerializeObject(result));
+               
                 }
             }
         }
         return default;
+    }
+    static async Task<object> ConvertToGenericTask(Task task, Type responseType)
+    { 
+        var genericTaskType = typeof(Task<>).MakeGenericType(responseType);
+        var resultProperty = genericTaskType.GetProperty("Result");
+         
+        await task.ConfigureAwait(false);
+        return resultProperty!.GetValue(task)!;
     }
 }
