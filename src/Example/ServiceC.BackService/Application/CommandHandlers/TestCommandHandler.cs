@@ -4,7 +4,7 @@ namespace ServiceC.BackService.Application.CommandHandlers;
 
 public class TestCommandHandler : RequestHandler<TestCommand>
 {
-    public TestCommandHandler(LightMediatorOptions mediatorOptions) : base(mediatorOptions)
+    public TestCommandHandler() 
     {
     }
      

@@ -3,15 +3,13 @@ namespace LightMediator;
 
 public abstract class RequestHandler<TRequest> : IRequestHandler<TRequest> where TRequest : class, IRequest
 {
-    public string RequestName { get; }
-    private readonly LightMediatorOptions _mediatorOptions;
-    protected RequestHandler(LightMediatorOptions mediatorOptions)
+    public string RequestName { get; } 
+    protected RequestHandler()
     {
-        RequestName = typeof(TRequest).Name;
-        _mediatorOptions = mediatorOptions;
+        RequestName = typeof(TRequest).Name; 
     }
 
-    public Task HandleRequest(object request, CancellationToken? cancellationToken)
+    public Task HandleRequest(object request, LightMediatorOptions mediatorOptions, CancellationToken? cancellationToken)
     {
         var json = JsonConvert.SerializeObject(request);
         var sourceFields = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
@@ -32,7 +30,7 @@ public abstract class RequestHandler<TRequest> : IRequestHandler<TRequest> where
                 var value = sourceFields[property.Name];
                 property.SetValue(targetFields, Convert.ChangeType(value, property.PropertyType));
             }
-            else if (!_mediatorOptions.IgnoreNotificationDifferences)
+            else if (!mediatorOptions.IgnoreNotificationDifferences)
             {
                 throw new InvalidCastException($"Cannot cast {RequestName}");
             }
@@ -54,7 +52,7 @@ public abstract class RequestHandler<TRequest,TResposne> : IRequestHandler<TRequ
         _mediatorOptions = mediatorOptions;
     }
 
-    public Task<TResposne> HandleRequest(object request, CancellationToken? cancellationToken)
+    public Task<TResposne> HandleRequest(object request, LightMediatorOptions mediatorOptions, CancellationToken? cancellationToken)
     {
         var json = JsonConvert.SerializeObject(request);
         var sourceFields = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);

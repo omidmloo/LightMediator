@@ -3,17 +3,15 @@ namespace LightMediator;
 
 public abstract class NotificationHandler<TNotification> : INotificationHandler where TNotification : class, INotification
 {
-    public string NotificationName { get; }
-    private readonly LightMediatorOptions _mediatorOptions;
+    public string NotificationName { get; } 
 
 
-    protected NotificationHandler(LightMediatorOptions mediatorOptions)
+    protected NotificationHandler()
     {
-        NotificationName = typeof(TNotification).Name;
-        _mediatorOptions = mediatorOptions;
+        NotificationName = typeof(TNotification).Name; 
     }
 
-    public Task HandleNotification(object message, CancellationToken? cancellationToken = null)
+    public Task HandleNotification(object message, LightMediatorOptions mediatorOptions, CancellationToken? cancellationToken = null)
     {
 
         var json = JsonConvert.SerializeObject(message);
@@ -21,7 +19,7 @@ public abstract class NotificationHandler<TNotification> : INotificationHandler 
         var targetFields = Activator.CreateInstance(typeof(TNotification));
         var targetProperties = typeof(TNotification).GetProperties();
 
-        if (!_mediatorOptions.IgnoreNotificationDifferences &&
+        if (!mediatorOptions.IgnoreNotificationDifferences &&
             (sourceFields == null ||
             sourceFields.Count() == 0))
         {
@@ -30,7 +28,7 @@ public abstract class NotificationHandler<TNotification> : INotificationHandler 
         if (sourceFields == null)
             throw new ArgumentNullException();
 
-        if (!_mediatorOptions.IgnoreNotificationDifferences && 
+        if (!mediatorOptions.IgnoreNotificationDifferences && 
             sourceFields.Any(s => !targetProperties.Any(t => t.Name == s.Key)))
         {
             throw new InvalidCastException($"Cannot cast {NotificationName} - {typeof(TNotification).FullName} - Reciever notification has less fields");
@@ -42,7 +40,7 @@ public abstract class NotificationHandler<TNotification> : INotificationHandler 
                 var value = sourceFields[property.Name];
                 property.SetValue(targetFields, Convert.ChangeType(value, property.PropertyType));
             }
-            else if (!_mediatorOptions.IgnoreNotificationDifferences)
+            else if (!mediatorOptions.IgnoreNotificationDifferences)
             {
                 throw new InvalidCastException($"Cannot cast {NotificationName} - Published notification has less fields");
             }

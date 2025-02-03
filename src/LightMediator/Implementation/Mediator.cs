@@ -32,7 +32,7 @@ internal class Mediator : IMediator
             {
                 try
                 {
-                    await handler.HandleNotification(notification, cancellationToken);
+                    await handler.HandleNotification(notification,_mediatorOptions, cancellationToken);
                 }
                 catch (Exception ex)
                 {
@@ -78,7 +78,7 @@ internal class Mediator : IMediator
                 {
                     var handleMethod = handlerType.GetMethod("HandleRequest");
                     var requestInstance = Activator.CreateInstance(requestType);
-                    var task = (Task)handleMethod!.Invoke(handler, new object[] { requestInstance, CancellationToken.None })!;
+                    var task = (Task)handleMethod!.Invoke(handler, new object[] { requestInstance, _mediatorOptions, CancellationToken.None })!;
 
                     await task; // Ensure async execution
                     return;
@@ -122,7 +122,7 @@ internal class Mediator : IMediator
                 {
                     var handleMethod = handlerType.GetMethod("HandleRequest");
                     var requestInstance = Activator.CreateInstance(requestType);
-                    var task = (Task<TResponse>)handleMethod!.Invoke(handler, new object[] { requestInstance, CancellationToken.None })!;
+                    var task = (Task<TResponse>)handleMethod!.Invoke(handler, new object[] { requestInstance, _mediatorOptions, CancellationToken.None })!;
 
                     return await task;  
                 }
