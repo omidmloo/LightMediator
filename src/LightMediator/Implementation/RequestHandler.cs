@@ -13,7 +13,7 @@ public abstract class RequestHandler<TRequest> : IRequestHandler<TRequest> where
     {
         // FIXME: change the mapper
         var json = JsonConvert.SerializeObject(request);
-        var response = JsonConvert.DeserializeObject<TRequest>(json);
+        var response = JsonConvert.DeserializeObject<TRequest>(json)!;
         return Handle(response, cancellationToken);
     }
     public abstract Task Handle(TRequest request, CancellationToken? cancellationToken);
@@ -33,7 +33,7 @@ public abstract class RequestHandler<TRequest,TResposne> : IRequestHandler<TRequ
     {
         // FIXME: change the mapper
         var json = JsonConvert.SerializeObject(request);
-        var response = JsonConvert.DeserializeObject<TRequest>(json);
+        var response = JsonConvert.DeserializeObject<TRequest>(json)!;
         return Handle(response, cancellationToken); 
     }
     public abstract Task<TResposne> Handle(TRequest request, CancellationToken? cancellationToken);
