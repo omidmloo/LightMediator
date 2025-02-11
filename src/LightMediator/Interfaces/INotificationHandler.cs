@@ -2,8 +2,8 @@
 
 namespace LightMediator;
 
-public interface INotificationHandler
+internal interface INotificationHandler
 {
     string NotificationName { get; }
-    internal Task HandleNotification(object message,LightMediatorOptions mediatorOptions, CancellationToken? cancellationToken);
+    Task HandleNotification(object message,LightMediatorOptions mediatorOptions, CancellationToken? cancellationToken);
 }
