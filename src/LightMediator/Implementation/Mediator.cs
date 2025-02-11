@@ -58,14 +58,14 @@ internal class Mediator : IMediator
         foreach (var assembly in _mediatorOptions.Assemblies)
         {
 
-            requestTypes = assembly.GetTypes()
+            requestTypes.AddRange(assembly.GetTypes()
                 .Where(type => !type.IsAbstract &&
                                !type.IsInterface &&
                                (_mediatorOptions.IgnoreNamespaceInAssemblies &&
                                     type.Name == requestName) ||
                                     (!_mediatorOptions.IgnoreNamespaceInAssemblies &&
                                     type.FullName == requestName))
-                .ToList();
+                .ToList());
         }
         using var scope = _serviceProvider.CreateScope();
         foreach (Type requestType in requestTypes)
@@ -104,14 +104,14 @@ internal class Mediator : IMediator
         foreach (var assembly in _mediatorOptions.Assemblies)
         {
 
-            requestTypes = assembly.GetTypes()
+            requestTypes.AddRange(assembly.GetTypes()
                 .Where(type => !type.IsAbstract &&
                                !type.IsInterface &&
                                (_mediatorOptions.IgnoreNamespaceInAssemblies &&
                                     type.Name == requestName) ||
                                     (!_mediatorOptions.IgnoreNamespaceInAssemblies &&
                                     type.FullName == requestName))
-                .ToList();
+                .ToList());
         }
         using var scope = _serviceProvider.CreateScope();
         foreach (Type requestType in requestTypes)
