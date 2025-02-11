@@ -77,11 +77,8 @@ internal class Mediator : IMediator
 
                 if (handler != null)
                 {
-                    var handleMethod = handlerType.GetMethod("HandleRequest");
-                    var requestInstance = Activator.CreateInstance(requestType);
-                    if (requestInstance == null)
-                        throw new ArgumentNullException("request is null");
-                    var task = (Task)handleMethod!.Invoke(handler, new object[] { requestInstance, _mediatorOptions, CancellationToken.None })!;
+                    var handleMethod = handlerType.GetMethod("HandleRequest"); 
+                    var task = (Task)handleMethod!.Invoke(handler, new object[] { request, _mediatorOptions, CancellationToken.None })!;
 
                     await task; // Ensure async execution
                     return;
@@ -126,12 +123,9 @@ internal class Mediator : IMediator
 
                 if (handler != null)
                 {
-                    var handleMethod = handlerType.GetMethod("HandleRequest");
-                    var requestInstance = Activator.CreateInstance(requestType);
-                    if (requestInstance == null)
-                        throw new ArgumentNullException("request is null");
+                    var handleMethod = handlerType.GetMethod("HandleRequest"); 
 
-                    var task = (Task)handleMethod!.Invoke(handler, new object[] { requestInstance, _mediatorOptions, CancellationToken.None })!;
+                    var task = (Task)handleMethod!.Invoke(handler, new object[] { request, _mediatorOptions, CancellationToken.None })!;
                      
                     object result = await ConvertToGenericTask(task, responseType);
 
