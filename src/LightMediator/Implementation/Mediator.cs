@@ -17,7 +17,7 @@ internal class Mediator : IMediator
         _logger = logger;
         _mediatorOptions = mediatorOptions;
     }
-    public Task Publish(INotification notification, CancellationToken? cancellationToken = null)
+    public async Task Publish(INotification notification, CancellationToken? cancellationToken = null, bool waitAllToPublish = false)
     {
         var eventName = _mediatorOptions.IgnoreNamespaceInAssemblies
         ? notification.GetType().Name
@@ -27,21 +27,15 @@ internal class Mediator : IMediator
             .Where(c => c.NotificationName.Equals(eventName, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
+        List<Task> tasks = new List<Task>();
         foreach (var handler in matchingHandlers)
         {
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await handler.HandleNotification(notification, _mediatorOptions, cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error in handler: {ex.Message}");
-                }
-            });
+            tasks.Add(handler.HandleNotification(notification, _mediatorOptions, cancellationToken)); 
         }
-        return Task.CompletedTask;
+        if (waitAllToPublish)
+        {
+            await Task.WhenAll(tasks);
+        } 
     }
 
     public async Task Send<TRequest>(TRequest request, CancellationToken? cancellationToken = null) where TRequest : class, IRequest

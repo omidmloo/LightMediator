@@ -4,7 +4,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable> 
-		<Version>0.4.7</Version> 
+		<Version>0.4.8</Version> 
 		<Authors>Mahmood Malekloo</Authors> 
 		<Description>
 			LightMediator is a lightweight library for decoupled communication in Windows services. It simplifies communication between different namespaces, supports multiple notification types, and enables aggregation into a single service. Ideal for distributed and event-driven architectures.
@@ -18,6 +18,7 @@
 		<RequireLicenseAcceptance>false</RequireLicenseAcceptance>
 		<PackageReleaseNotes>
 			- Fix the notification mapper to map all notification types
+			- Add capability to ensure all notification handlers finished their jobs
 		</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<License>MIT</License>
