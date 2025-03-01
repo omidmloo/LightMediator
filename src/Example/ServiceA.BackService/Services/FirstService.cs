@@ -29,7 +29,7 @@ public class FirstService : BackgroundService
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var mediator = scope.ServiceProvider.GetService<IMediator>()!;   
-                    await mediator.Publish(newAppInfo, stoppingToken);
+                    await mediator.Publish(newAppInfo, stoppingToken, true);
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);

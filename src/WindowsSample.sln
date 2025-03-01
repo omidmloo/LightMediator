@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{D7B31B0A-B1EA-4077-B156-FB9562E9C05E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LightMediator", "LightMediator", "{D7B31B0A-B1EA-4077-B156-FB9562E9C05E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{43175467-B384-4DC4-9303-5DB4D1096423}"
 EndProject
