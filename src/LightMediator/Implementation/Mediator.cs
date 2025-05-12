@@ -1,12 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Reflection;
+﻿using Microsoft.Extensions.Logging; 
 
 namespace LightMediator;
 internal class Mediator : IMediator
 {
     private readonly ILogger<Mediator> _logger;
-    private readonly LightMediatorOptions _mediatorOptions;
+    internal readonly LightMediatorOptions _mediatorOptions;
     private readonly IServiceProvider _serviceProvider;
 
     public IEnumerable<INotificationHandler> _notificationHandlers { get; } = new List<INotificationHandler>();
@@ -138,4 +136,9 @@ internal class Mediator : IMediator
         await task.ConfigureAwait(false);
         return resultProperty!.GetValue(task)!;
     }
+
+    IServiceProvider IMediator.GetServiceProvider()
+    {
+        return _serviceProvider;
+    } 
 }

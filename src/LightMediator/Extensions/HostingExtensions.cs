@@ -1,9 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 
 namespace LightMediator;
 
 public static class HostingExtensions
 {
+    public static IHostBuilder AddLightMediator(
+        this IHostBuilder hostBuilder,
+        Action<LightMediatorOptions> configureOptions)
+    {
+        hostBuilder.ConfigureServices((context, collection) =>
+        {
+            collection.AddLightMediator(configureOptions, ServiceLifetime.Singleton);
+        });
+        return hostBuilder;
+    }
     public static IServiceCollection AddLightMediator(
         this IServiceCollection services,
         Action<LightMediatorOptions> configureOptions,
