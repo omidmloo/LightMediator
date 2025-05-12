@@ -4,44 +4,46 @@ namespace LightMediator.EventBus.SignalR;
 public static class HostingExtensions
 {
     private static string HubName = @"hubs/LightMediator";
-    public static LightMediatorEventBusOptions UseSignalRService(this LightMediatorEventBusOptions serviceBusOptions, IConfiguration configuration, string signalRSectionName)
+    public static LightMediatorEventBusOptions UseSignalRService(this LightMediatorEventBusOptions serviceBusOptions, IConfiguration configuration, string signalRSectionName, bool ignoreUntrustedCertificate = false)
     {
-        return UseSignalRService(serviceBusOptions, configuration.GetSection(signalRSectionName)); 
+        return UseSignalRService(serviceBusOptions, configuration.GetSection(signalRSectionName),ignoreUntrustedCertificate); 
     }
-    public static LightMediatorEventBusOptions UseSignalRService(this LightMediatorEventBusOptions serviceBusOptions, IConfigurationSection section)
+    public static LightMediatorEventBusOptions UseSignalRService(this LightMediatorEventBusOptions serviceBusOptions, IConfigurationSection section, bool ignoreUntrustedCertificate = false)
     {
         SignalRSettings signalRSettings = section.Get<SignalRSettings>()!;
-        return UseSignalRService(serviceBusOptions, signalRSettings);
+        return UseSignalRService(serviceBusOptions, signalRSettings, ignoreUntrustedCertificate);
     }
-    public static LightMediatorEventBusOptions UseSignalRService(this LightMediatorEventBusOptions serviceBusOptions, string signalRServerAddress)
+    public static LightMediatorEventBusOptions UseSignalRService(this LightMediatorEventBusOptions serviceBusOptions, string signalRServerAddress, bool ignoreUntrustedCertificate = false)
     {
         string hubUrl = $"{signalRServerAddress}{HubName}";
-        ConfigureSignalRServices(serviceBusOptions.ServiceCollection, hubUrl);
+        ConfigureSignalRServices(serviceBusOptions.ServiceCollection, hubUrl, ignoreUntrustedCertificate);
         return serviceBusOptions;
     }
-    public static LightMediatorEventBusOptions UseSignalRService(this LightMediatorEventBusOptions serviceBusOptions, SignalRSettings signalRSettings)
+    public static LightMediatorEventBusOptions UseSignalRService(this LightMediatorEventBusOptions serviceBusOptions, SignalRSettings signalRSettings, bool ignoreUntrustedCertificate = false)
     {
         string hubUrl = $"{signalRSettings.ServerAddress}{HubName}";
-        ConfigureSignalRServices(serviceBusOptions.ServiceCollection, hubUrl);
+        ConfigureSignalRServices(serviceBusOptions.ServiceCollection, hubUrl, ignoreUntrustedCertificate);
         return serviceBusOptions;
     }
-    private static void ConfigureSignalRServices(IServiceCollection services, string hubUrl)
+    private static void ConfigureSignalRServices(IServiceCollection services, string hubUrl,bool ignoreUntrustedCertificate = false)
     {
         services.AddSingleton(provider =>
         {
             return new HubConnectionBuilder()
                 .WithUrl(hubUrl, options =>
                 {
-                    options.HttpMessageHandlerFactory = inner =>
+                    if (ignoreUntrustedCertificate)
                     {
-                        if (inner is HttpClientHandler clientHandler)
+                        options.HttpMessageHandlerFactory = inner =>
                         {
-                            // WARNING: this will accept ANY certificate!
-                            clientHandler.ServerCertificateCustomValidationCallback =
-                                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                        }
-                        return inner;
-                    };
+                            if (inner is HttpClientHandler clientHandler)
+                            { 
+                                clientHandler.ServerCertificateCustomValidationCallback =
+                                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                            }
+                            return inner;
+                        };
+                    }
                 })
                 .WithAutomaticReconnect()
                 .Build();
