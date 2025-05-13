@@ -4,7 +4,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.5.0</Version>
+		<Version>0.5.2</Version>
 		<Authors>Mahmood Malekloo</Authors>
 		<Description>
 			EventBus capability to publish events between applications using different messaging systems
@@ -17,7 +17,7 @@
 		<Icon>icon.png</Icon>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageReleaseNotes>
-			- Create base features
+			- Add exception handling
 		</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<License>MIT</License>
@@ -35,7 +35,7 @@
 	<ItemGroup>
 		<None Include="LICENSE" Pack="true" PackagePath="" />
 		<None Include="README.md" Pack="true" PackagePath="" />
-		<PackageReference Include="LightMediator" Version="[0.5.0,)" />
+		<PackageReference Include="LightMediator" Version="0.5.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.2" />
 	</ItemGroup>
