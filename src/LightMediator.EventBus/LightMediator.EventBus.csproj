@@ -4,7 +4,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.5.2</Version>
+		<Version>0.5.1.1</Version>
 		<Authors>Mahmood Malekloo</Authors>
 		<Description>
 			EventBus capability to publish events between applications using different messaging systems
