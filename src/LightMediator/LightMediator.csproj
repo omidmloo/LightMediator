@@ -3,26 +3,25 @@
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable> 
-		<Version>0.4.8</Version> 
-		<Authors>Mahmood Malekloo</Authors> 
+		<Nullable>enable</Nullable>
+		<Version>0.5.1</Version>
+		<Authors>Mahmood Malekloo</Authors>
 		<Description>
 			LightMediator is a lightweight library for decoupled communication in Windows services. It simplifies communication between different namespaces, supports multiple notification types, and enables aggregation into a single service. Ideal for distributed and event-driven architectures.
 		</Description>
 		<PackageTags>mediator;lightweight;notification;event-driven;windows-services;decoupled;microservices</PackageTags>
-		<PackageProjectUrl>https://github.com/MahmoodMalekloo/LightMediator</PackageProjectUrl> 
-		<RepositoryUrl>https://github.com/MahmoodMalekloo/LightMediator</RepositoryUrl> 
+		<PackageProjectUrl>https://github.com/MahmoodMalekloo/LightMediator</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/MahmoodMalekloo/LightMediator</RepositoryUrl>
 		<LicenseUrl>https://opensource.org/licenses/MIT</LicenseUrl>
 		<!-- Replace with your chosen license -->
-		<Icon>icon.png</Icon> 
-		<RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+		<Icon>icon.png</Icon>
+		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageReleaseNotes>
-			- Fix the notification mapper to map all notification types
-			- Add capability to ensure all notification handlers finished their jobs
+			- Add exception handling  
 		</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<License>MIT</License>
-		<PackageReadmeFile>README.md</PackageReadmeFile> 
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -37,6 +36,7 @@
 		<None Include="LICENSE" Pack="true" PackagePath="" />
 		<None Include="README.md" Pack="true" PackagePath="" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>

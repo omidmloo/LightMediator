@@ -1,25 +1,35 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using LightMediator.Exceptions;
 
 namespace LightMediator;
 
 public static class HostingExtensions
 {
+    public static IHostBuilder AddLightMediator(
+        this IHostBuilder hostBuilder,
+        Action<LightMediatorOptions> configureOptions)
+    {
+        hostBuilder.ConfigureServices((context, collection) =>
+        {
+            collection.AddLightMediator(configureOptions, ServiceLifetime.Singleton);
+        });
+        return hostBuilder;
+    }
+
     public static IServiceCollection AddLightMediator(
         this IServiceCollection services,
         Action<LightMediatorOptions> configureOptions,
         ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
     {
+        if (configureOptions == null)
+            throw new LightMediatorOptionsException("configureOptions cannot be null.");
+
         var options = new LightMediatorOptions();
-        configureOptions?.Invoke(options);
+        configureOptions.Invoke(options);
 
-        // Register the mediator
-
+        // Register core options and mediator
         if (serviceLifetime == ServiceLifetime.Scoped)
         {
-            services.AddScoped(o =>
-            {
-                return options;
-            });
+            services.AddScoped(_ => options);
             services.TryAddScoped<IMediator, Mediator>();
         }
         else
@@ -28,31 +38,35 @@ public static class HostingExtensions
             services.TryAddSingleton<IMediator, Mediator>();
         }
 
-
-         
         if (options.RegisterNotificationsByAssembly && options.Assemblies?.Any() == true)
         {
             foreach (var assembly in options.Assemblies)
             {
-                var notificationHandlerTypes = assembly.GetTypes()
-                    .Where(type => !type.IsAbstract && !type.IsInterface)
-                    .Where(type => type.BaseType != null
-                                   && type.BaseType.IsGenericType
-                                   && type.BaseType.GetGenericTypeDefinition() == typeof(NotificationHandler<>))
-                    .ToList();
-
-                foreach (var handlerType in notificationHandlerTypes)
+                try
                 {
+                    var notificationHandlerTypes = assembly.GetTypes()
+                        .Where(type => !type.IsAbstract && !type.IsInterface)
+                        .Where(type => type.BaseType != null &&
+                                       type.BaseType.IsGenericType &&
+                                       type.BaseType.GetGenericTypeDefinition() == typeof(NotificationHandler<>))
+                        .ToList();
 
-                    if (serviceLifetime == ServiceLifetime.Scoped)
+                    foreach (var handlerType in notificationHandlerTypes)
                     {
-                        services.AddScoped(typeof(INotificationHandler), handlerType);
-                    }
-                    else
-                    {
-                        services.AddSingleton(typeof(INotificationHandler), handlerType);
-                    }
+                        if (!typeof(INotificationHandler).IsAssignableFrom(handlerType))
+                        {
+                            throw new InvalidHandlerRegistrationException(handlerType, "Does not implement INotificationHandler.");
+                        }
 
+                        if (serviceLifetime == ServiceLifetime.Scoped)
+                            services.AddScoped(typeof(INotificationHandler), handlerType);
+                        else
+                            services.AddSingleton(typeof(INotificationHandler), handlerType);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new AssemblyScanningException(assembly, ex);
                 }
             }
         }
@@ -61,49 +75,43 @@ public static class HostingExtensions
         {
             foreach (var assembly in options.Assemblies)
             {
-                var requestHandlerTypes =  assembly.GetTypes()
-                    .Where(type => !type.IsAbstract && !type.IsInterface)
-                    .SelectMany(type => type.GetInterfaces(), (type, iface) => new { Type = type, Interface = iface })
-                    .Where(t => t.Interface.IsGenericType &&
-                                t.Interface.GetGenericTypeDefinition() == typeof(IRequestHandler<,>));
-
-
-                foreach (var handler in requestHandlerTypes)
+                try
                 {
-                    if (serviceLifetime == ServiceLifetime.Scoped)
-                    {
-                        services.AddSingleton(handler.Interface, handler.Type);
-                    }
-                    else
-                    {
-                        services.AddScoped(handler.Interface, handler.Type);
-                    }
-                }  
+                    var handlerTypes1 = assembly.GetTypes()
+                        .Where(type => !type.IsAbstract && !type.IsInterface)
+                        .SelectMany(type => type.GetInterfaces(), (type, iface) => new { Type = type, Interface = iface })
+                        .Where(t => t.Interface.IsGenericType &&
+                                    t.Interface.GetGenericTypeDefinition() == typeof(IRequestHandler<,>));
 
-                var handlerTypes = assembly.GetTypes()
-                    .Where(type => !type.IsAbstract && !type.IsInterface)
-                    .SelectMany(type => type.GetInterfaces(), (type, iface) => new { Type = type, Interface = iface })
-                    .Where(t => t.Interface.IsGenericType &&
-                                t.Interface.GetGenericTypeDefinition() == typeof(IRequestHandler<>));
-
-
-                foreach (var handler in handlerTypes)
-                {
-                    if (serviceLifetime == ServiceLifetime.Scoped)
+                    foreach (var handler in handlerTypes1)
                     {
-                        services.AddSingleton(handler.Interface, handler.Type);
+                        if (serviceLifetime == ServiceLifetime.Scoped)
+                            services.AddScoped(handler.Interface, handler.Type);
+                        else
+                            services.AddSingleton(handler.Interface, handler.Type);
                     }
-                    else
+
+                    var handlerTypes2 = assembly.GetTypes()
+                        .Where(type => !type.IsAbstract && !type.IsInterface)
+                        .SelectMany(type => type.GetInterfaces(), (type, iface) => new { Type = type, Interface = iface })
+                        .Where(t => t.Interface.IsGenericType &&
+                                    t.Interface.GetGenericTypeDefinition() == typeof(IRequestHandler<>));
+
+                    foreach (var handler in handlerTypes2)
                     {
-                        services.AddScoped(handler.Interface, handler.Type);
+                        if (serviceLifetime == ServiceLifetime.Scoped)
+                            services.AddScoped(handler.Interface, handler.Type);
+                        else
+                            services.AddSingleton(handler.Interface, handler.Type);
                     }
                 }
-
-
+                catch (Exception ex)
+                {
+                    throw new AssemblyScanningException(assembly, ex);
+                }
             }
         }
 
         return services;
     }
-
 }

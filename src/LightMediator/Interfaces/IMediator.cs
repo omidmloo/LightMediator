@@ -2,6 +2,7 @@
 
 public interface IMediator
 {
+    IServiceProvider GetServiceProvider();
     /// <summary>
     /// Publishes a notification to all registered notification handlers.
     /// </summary>
