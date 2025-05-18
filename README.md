@@ -1,4 +1,8 @@
+ 
 # LightMediator
+
+[![NuGet](https://img.shields.io/nuget/v/LightMediator.EventBus.svg)](https://www.nuget.org/packages/LightMediator)
+[![License](https://img.shields.io/github/license/omidmloo/LightMediator)](LICENSE)
 
 **LightMediator** is a lightweight library designed to simplify decoupled communication in distributed Windows services. It works with multiple notification types and supports services across different namespaces.
 
