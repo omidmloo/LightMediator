@@ -29,8 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4BBF96B4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightMediator.Tests", "..\Tests\LightMediator.Tests\LightMediator.Tests.csproj", "{9F577A8F-1F3A-4BF9-A3DE-71D9B64D7DD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightMediator.EventBus.SignalR", "LightMediator.EventBus.SignalR\LightMediator.EventBus.SignalR.csproj", "{F6D26CBC-25AA-4DDC-B804-C7743AFFF573}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,10 +59,6 @@ Global
 		{9F577A8F-1F3A-4BF9-A3DE-71D9B64D7DD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F577A8F-1F3A-4BF9-A3DE-71D9B64D7DD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F577A8F-1F3A-4BF9-A3DE-71D9B64D7DD0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6D26CBC-25AA-4DDC-B804-C7743AFFF573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6D26CBC-25AA-4DDC-B804-C7743AFFF573}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6D26CBC-25AA-4DDC-B804-C7743AFFF573}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6D26CBC-25AA-4DDC-B804-C7743AFFF573}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,7 +74,6 @@ Global
 		{98A728B9-23E6-4925-8CE1-29FB360D7811} = {D7B31B0A-B1EA-4077-B156-FB9562E9C05E}
 		{4BBF96B4-34B0-4663-B24E-48069BDCBAEA} = {D7B31B0A-B1EA-4077-B156-FB9562E9C05E}
 		{9F577A8F-1F3A-4BF9-A3DE-71D9B64D7DD0} = {4BBF96B4-34B0-4663-B24E-48069BDCBAEA}
-		{F6D26CBC-25AA-4DDC-B804-C7743AFFF573} = {D7B31B0A-B1EA-4077-B156-FB9562E9C05E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AC01BC7-8CA6-4626-9944-B41AC2DFF39D}
