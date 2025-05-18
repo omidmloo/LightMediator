@@ -4,7 +4,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.5.1</Version>
+		<Version>0.5.1.1</Version>
 		<Authors>Mahmood Malekloo</Authors>
 		<Description>
 			Signalr messaging service extension for lightmediator event bus
