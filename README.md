@@ -162,3 +162,16 @@ builder.Services.AddLightMediator(options =>
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
+
+## 💬 Related Projects
+ 
+* [LightMediator.EventBus](https://github.com/omidmloo/LightMediator.EventBus)
+* [LightMediator.EventBus.SignalR](https://github.com/omidmloo/LightMediator.EventBus.SignalR) 
+* [LightMediator.EventBus.SignalR](https://github.com/omidmloo/LightMediator.EventBus.RabbitMQ) 
+
+---
+
+> Created with ❤️ by [@omidmloo](https://github.com/omidmloo)
+
+```
+ 
