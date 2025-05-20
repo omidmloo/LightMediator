@@ -1,4 +1,3 @@
- 
 # LightMediator
 
 [![NuGet](https://img.shields.io/nuget/v/LightMediator.svg)](https://www.nuget.org/packages/LightMediator)
@@ -24,31 +23,39 @@ dotnet add package LightMediator
 ### Publish Notifications
 You can publish notifications to subscribers using the LightMediator instance:
 ```csharp
-var mediator = new LightMediator();
-mediator.Publish(new Notification("ServiceStarted"));
+  private readonly IMediator _mediator;
+  public SampleService(IMediator mediator)
+  {
+      _deviceService = deviceService;
+  }
+.
+.
+    NewAppInfoNotification newAppInfo = new NewAppInfoNotification()
+    {
+        Title = "NewApp",
+        Description = "Des"
+    };
+    await mediator.Publish(newAppInfo);
 ```
 
 ### Handle Notifications
 To handle notifications, create a class that implements the `INotificationHandler<T>` interface. Ensure that `Notification` implements the `INotification` interface:
 ```csharp
-public class Notification : INotification
+public class NewAppInfoNotification : INotification
 {
-    public string Message { get; }
+    public string Title { get; set; }
+    public string? Description { get; set; }
+}
 
-    public Notification(string message)
+
+public class NewAppInfoNotificationHandler : NotificationHandler<NewAppInfoNotification>
+{ 
+    public override async Task Handle(NewAppInfoNotification notification, CancellationToken? cancellationToken)
     {
-        Message = message;
+           // Handle the recieved notification
     }
 }
 
-public class NotificationHandler : INotificationHandler<Notification>
-{
-    public Task Handle(Notification notification, CancellationToken cancellationToken)
-    {
-        Console.WriteLine($"Received: {notification.Message}");
-        return Task.CompletedTask;
-    }
-}
 ```
 
 ### Use Commands and Command Handlers
@@ -58,7 +65,14 @@ LightMediator also supports **commands** and **command handlers** to facilitate 
 A command is a class that implements the `IRequest<TResponse>` interface, where `TResponse` is the type of the response the command expects.
 
 ```csharp
-public class TestCommand : IRequest<TestCommandResponse>
+
+public class TestCommandWithResponse : IRequest<TestCommandResponse>
+{
+    public string Title { get; set; }
+    public string Description { get; set; }
+}
+
+public class TestCommandResponse
 {
     public string Message { get; set; }
 }
@@ -68,33 +82,27 @@ public class TestCommand : IRequest<TestCommandResponse>
 A command handler is a class that implements the `IRequestHandler<TRequest, TResponse>` interface. The handler contains the logic for processing the command.
 
 ```csharp
-public class TestCommandHandler : RequestHandler<TestCommand, TestCommandResponse>
+
+public class TestCommandWithResponseHandler : RequestHandler<TestCommandWithResponse, TestCommandResponse>
 {
-    private readonly ILogger<TestCommandResponseHandler> _logger;
-    public TestCommandHandler(ILogger<TestCommandResponseHandler> logger)
+    private readonly ILogger<TestCommandWithResponseHandler> _logger;
+    public TestCommandWithResponseHandler(ILogger<TestCommandWithResponseHandler> logger) 
     {
-      _logger = logger;
+        _logger = logger;
     }
-    public override async Task<TestCommandResponse> Handle(TestCommand request, CancellationToken cancellationToken)
+
+    public override async Task<TestCommandResponse> Handle(TestCommandWithResponse request, CancellationToken? cancellationToken)
     {
-        // Handle the command and return a response
+        await Task.CompletedTask; 
         return new TestCommandResponse
         {
-            ResponseMessage = $"Received command with message: {request.Message}"
+            Message = "command executed"
         };
     }
 }
-```
 
-#### Define a Command Response
-The response is a class that contains the result of processing the command.
 
-```csharp
-public class TestCommandResponse
-{
-    public string ResponseMessage { get; set; }
-}
-```
+``` 
 
 #### Sending a Command
 You can send a command and get a response using the `Send` method from LightMediator.
@@ -114,12 +122,6 @@ You can send a command and get a response using the `Send` method from LightMedi
      {
          while (!stoppingToken.IsCancellationRequested)
          {
-             await _mediator.Send(new TestCommand()
-             {
-                 Title = "Test",
-                 Description = "Test",
-             });
-
              var res = await _mediator.Send<bool>(new TestCommandResponse()
              {
                  Title = "Test",

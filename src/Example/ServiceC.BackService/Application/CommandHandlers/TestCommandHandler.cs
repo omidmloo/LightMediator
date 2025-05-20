@@ -10,7 +10,7 @@ public class TestCommandHandler : RequestHandler<TestCommand>
      
     public override async Task Handle(TestCommand request, CancellationToken? cancellationToken)
     {
-        Console.WriteLine("command runned");
+        Console.WriteLine("command recieved");
         await Task.CompletedTask;
     }
 }
