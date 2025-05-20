@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.Logging; 
-
-namespace LightMediator;
+﻿namespace LightMediator;
 internal class Mediator : IMediator
 {
     private readonly ILogger<Mediator> _logger;
     internal readonly LightMediatorOptions _mediatorOptions;
     private readonly IServiceProvider _serviceProvider;
 
-    public IEnumerable<INotificationHandler> _notificationHandlers { get; } = new List<INotificationHandler>();
+    public IEnumerable<INotificationHandler> _notificationHandlers { get; }
+
     public Mediator(IServiceProvider serviceProvider, ILogger<Mediator> logger, LightMediatorOptions mediatorOptions)
     {
         _serviceProvider = serviceProvider;
@@ -15,130 +14,149 @@ internal class Mediator : IMediator
         _logger = logger;
         _mediatorOptions = mediatorOptions;
     }
+
     public async Task Publish(INotification notification, CancellationToken? cancellationToken = null, bool waitAllToPublish = false)
     {
         var eventName = _mediatorOptions.IgnoreNamespaceInAssemblies
-        ? notification.GetType().Name
-        : notification.GetType().FullName;
+            ? notification.GetType().Name
+            : notification.GetType().FullName;
 
         var matchingHandlers = _notificationHandlers
             .Where(c => c.NotificationName.Equals(eventName, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        List<Task> tasks = new List<Task>();
+        var tasks = new List<Task>();
+
         foreach (var handler in matchingHandlers)
         {
-            tasks.Add(handler.HandleNotification(notification, _mediatorOptions, cancellationToken)); 
+            try
+            {
+                tasks.Add(handler.HandleNotification(notification, _mediatorOptions, cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to handle notification with handler {Handler}", handler.GetType().Name);
+            }
         }
+
         if (waitAllToPublish)
         {
             await Task.WhenAll(tasks);
-        } 
+        }
     }
 
     public async Task Send<TRequest>(TRequest request, CancellationToken? cancellationToken = null) where TRequest : class, IRequest
     {
         if (request == null)
-            throw new ArgumentNullException("request is null");
+            throw new ArgumentNullException(nameof(request));
 
-        var requestName = _mediatorOptions.IgnoreNamespaceInAssemblies
-                          ? request.GetType().Name
-                          : request.GetType().FullName;
+        var requestName = GetRequestName(request.GetType());
 
-        List<Type> requestTypes = new List<Type>();
+        using var scope = _serviceProvider.CreateScope();
 
         foreach (var assembly in _mediatorOptions.Assemblies)
         {
+            var requestTypes = assembly.GetTypes()
+                .Where(type => IsMatchingType(type, requestName))
+                .ToList();
 
-            requestTypes.AddRange(assembly.GetTypes()
-                .Where(type => !type.IsAbstract &&
-                               !type.IsInterface &&
-                               (_mediatorOptions.IgnoreNamespaceInAssemblies &&
-                                    type.Name == requestName) ||
-                                    (!_mediatorOptions.IgnoreNamespaceInAssemblies &&
-                                    type.FullName == requestName))
-                .ToList());
-        }
-        using var scope = _serviceProvider.CreateScope();
-        foreach (Type requestType in requestTypes)
-        {
-            var handlerType = typeof(IRequestHandler<>).MakeGenericType(requestType);
-            if (handlerType != null)
+            foreach (var requestType in requestTypes)
             {
+                var handlerType = typeof(IRequestHandler<>).MakeGenericType(requestType);
+
                 var handler = scope.ServiceProvider.GetService(handlerType);
+                if (handler == null)
+                    continue;
 
-                if (handler != null)
+                var method = handlerType.GetMethod("HandleRequest");
+                if (method == null)
+                    throw new InvalidHandlerInterfaceException(handlerType);
+
+                try
                 {
-                    var handleMethod = handlerType.GetMethod("HandleRequest"); 
-                    var task = (Task)handleMethod!.Invoke(handler, new object[] { request, _mediatorOptions, CancellationToken.None })!;
-
-                    await task; // Ensure async execution
+                    var task = (Task)method.Invoke(handler, new object[] { request, _mediatorOptions, cancellationToken ?? CancellationToken.None })!;
+                    await task;
                     return;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Exception invoking handler {Handler}", handlerType.Name);
+                    throw new RequestInvocationException(handlerType, ex);
                 }
             }
         }
+
+        throw new HandlerNotFoundException(requestName);
     }
 
     public async Task<TResponse?> Send<TResponse>(IRequest<TResponse> request, CancellationToken? cancellationToken = null)
     {
         if (request == null)
-            throw new ArgumentNullException("request is null");
+            throw new ArgumentNullException(nameof(request));
 
-        var requestName = _mediatorOptions.IgnoreNamespaceInAssemblies
-       ? request.GetType().Name
-       : request.GetType().FullName;
+        var requestName = GetRequestName(request.GetType());
 
-        List<Type> requestTypes = new List<Type>();
+        using var scope = _serviceProvider.CreateScope();
 
         foreach (var assembly in _mediatorOptions.Assemblies)
         {
+            var requestTypes = assembly.GetTypes()
+                .Where(type => IsMatchingType(type, requestName))
+                .ToList();
 
-            requestTypes.AddRange(assembly.GetTypes()
-                .Where(type => !type.IsAbstract &&
-                               !type.IsInterface &&
-                               (_mediatorOptions.IgnoreNamespaceInAssemblies &&
-                                    type.Name == requestName) ||
-                                    (!_mediatorOptions.IgnoreNamespaceInAssemblies &&
-                                    type.FullName == requestName))
-                .ToList());
-        }
-        using var scope = _serviceProvider.CreateScope();
-        foreach (Type requestType in requestTypes)
-        {
-            Type? responseType = requestType.GetInterfaces()!.FirstOrDefault()!.GetGenericArguments()!.FirstOrDefault();
-            if (responseType == null)
-                continue;
-            var handlerType = typeof(IRequestHandler<,>).MakeGenericType(requestType, responseType);
-            if (handlerType != null)
+            foreach (var requestType in requestTypes)
             {
+                var responseType = requestType.GetInterfaces().FirstOrDefault()?.GetGenericArguments().FirstOrDefault();
+                if (responseType == null)
+                    continue;
+
+                var handlerType = typeof(IRequestHandler<,>).MakeGenericType(requestType, responseType);
                 var handler = scope.ServiceProvider.GetService(handlerType);
+                if (handler == null)
+                    continue;
 
-                if (handler != null)
+                var method = handlerType.GetMethod("HandleRequest");
+                if (method == null)
+                    throw new InvalidHandlerInterfaceException(handlerType);
+
+                try
                 {
-                    var handleMethod = handlerType.GetMethod("HandleRequest"); 
-
-                    var task = (Task)handleMethod!.Invoke(handler, new object[] { request, _mediatorOptions, CancellationToken.None })!;
-                     
-                    object result = await ConvertToGenericTask(task, responseType);
+                    var task = (Task)method.Invoke(handler, new object[] { request, _mediatorOptions, cancellationToken ?? CancellationToken.None })!;
+                    var result = await ConvertToGenericTask(task, responseType);
 
                     return JsonConvert.DeserializeObject<TResponse>(JsonConvert.SerializeObject(result));
-               
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Exception invoking handler {Handler}", handlerType.Name);
+                    throw new RequestInvocationException(handlerType, ex);
                 }
             }
         }
-        return default;
-    }
-    static async Task<object> ConvertToGenericTask(Task task, Type responseType)
-    { 
-        var genericTaskType = typeof(Task<>).MakeGenericType(responseType);
-        var resultProperty = genericTaskType.GetProperty("Result");
-         
-        await task.ConfigureAwait(false);
-        return resultProperty!.GetValue(task)!;
+
+        throw new HandlerNotFoundException(requestName);
     }
 
-    IServiceProvider IMediator.GetServiceProvider()
+    private static async Task<object> ConvertToGenericTask(Task task, Type responseType)
     {
-        return _serviceProvider;
-    } 
+        var genericTaskType = typeof(Task<>).MakeGenericType(responseType);
+        var resultProperty = genericTaskType.GetProperty("Result");
+
+        await task.ConfigureAwait(false);
+        return resultProperty?.GetValue(task)!;
+    }
+
+    private string GetRequestName(Type type)
+    {
+        return _mediatorOptions.IgnoreNamespaceInAssemblies ? type.Name : type.FullName!;
+    }
+
+    private bool IsMatchingType(Type type, string requestName)
+    {
+        return !type.IsAbstract && !type.IsInterface &&
+               (_mediatorOptions.IgnoreNamespaceInAssemblies && type.Name == requestName ||
+                !_mediatorOptions.IgnoreNamespaceInAssemblies && type.FullName == requestName);
+    }
+
+    IServiceProvider IMediator.GetServiceProvider() => _serviceProvider;
 }

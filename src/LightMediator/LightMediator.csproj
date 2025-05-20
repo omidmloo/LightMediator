@@ -10,18 +10,18 @@
 			LightMediator is a lightweight library for decoupled communication in Windows services. It simplifies communication between different namespaces, supports multiple notification types, and enables aggregation into a single service. Ideal for distributed and event-driven architectures.
 		</Description>
 		<PackageTags>mediator;lightweight;notification;event-driven;windows-services;decoupled;microservices</PackageTags>
-		<PackageProjectUrl>https://github.com/MahmoodMalekloo/LightMediator</PackageProjectUrl> 
-		<RepositoryUrl>https://github.com/MahmoodMalekloo/LightMediator</RepositoryUrl> 
+		<PackageProjectUrl>https://github.com/MahmoodMalekloo/LightMediator</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/MahmoodMalekloo/LightMediator</RepositoryUrl>
 		<LicenseUrl>https://opensource.org/licenses/MIT</LicenseUrl>
 		<!-- Replace with your chosen license -->
-		<Icon>icon.png</Icon> 
-		<RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+		<Icon>icon.png</Icon>
+		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageReleaseNotes>
 			- Add exception handling  
 		</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<License>MIT</License>
-		<PackageReadmeFile>README.md</PackageReadmeFile> 
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">

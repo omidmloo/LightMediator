@@ -1,4 +1,3 @@
-﻿ 
 # LightMediator
 
 [![NuGet](https://img.shields.io/nuget/v/LightMediator.svg)](https://www.nuget.org/packages/LightMediator)
