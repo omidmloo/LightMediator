@@ -1,4 +1,5 @@
-﻿using static System.Collections.Specialized.BitVector32;
+﻿using Microsoft.Extensions.Options;
+using static System.Collections.Specialized.BitVector32;
 
 namespace LightMediator.EventBus.RabbitMQ;
 
@@ -15,9 +16,9 @@ public static class HostingExtensions
         return UseRabbitMQ(serviceBusOptions, configuration.GetSection(rabbitMqSectionName));
     }
 
-   public static LightMediatorEventBusOptions UseRabbitMQ(
-        this LightMediatorEventBusOptions serviceBusOptions,
-    IConfigurationSection configurationSection)
+    public static LightMediatorEventBusOptions UseRabbitMQ(
+         this LightMediatorEventBusOptions serviceBusOptions,
+     IConfigurationSection configurationSection)
     {
         if (configurationSection == null) throw new ArgumentNullException(nameof(configurationSection));
 
@@ -29,7 +30,7 @@ public static class HostingExtensions
     }
 
     public static LightMediatorEventBusOptions UseRabbitMQ(
-        this LightMediatorEventBusOptions serviceBusOptions, 
+        this LightMediatorEventBusOptions serviceBusOptions,
         RabbitMQSettings settings)
     {
         if (settings == null)
@@ -42,13 +43,14 @@ public static class HostingExtensions
 
             cfg.UsingRabbitMq((context, cfgRabbit) =>
             {
-                cfgRabbit.Host(new Uri(settings.HostUri),settings.VirtualHost, h =>
+                cfgRabbit.Host(new Uri(settings.HostUri), settings.VirtualHost, h =>
                 {
                     h.Username(settings.Username);
-                    h.Password(settings.Password);  
+                    h.Password(settings.Password);
                 });
-                cfgRabbit.ReceiveEndpoint("lightmediator-events-queue", e =>
-                { 
+
+                cfgRabbit.ReceiveEndpoint($"lightmediator-{Assembly.GetEntryAssembly()!.GetName().Name}-queue", e =>
+                {
                     e.ConfigureConsumer<RabbitMQEventBus<RabbitMQEvent>>(context);
                 });
                 if (settings.EnableRetry)
