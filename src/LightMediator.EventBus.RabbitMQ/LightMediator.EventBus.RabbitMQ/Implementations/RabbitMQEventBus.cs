@@ -33,9 +33,12 @@ internal class RabbitMQEventBus<TEvent> : ILightMediatorEventBus, IConsumer<TEve
             var currentAssembly = Assembly.GetEntryAssembly()?.FullName;
             if (rabbitMQEvent.AssemblyName == currentAssembly)
             {
-                throw new InvalidOperationException("Temporary failure");
+                await context.Publish(context.Message);
             }
-            await OnEventRecieved(textMessage, null);
+            else
+            {
+                await OnEventRecieved(textMessage, null);
+            }
         }
         catch (Exception ex)
         {
