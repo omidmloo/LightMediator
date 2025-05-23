@@ -12,8 +12,7 @@ It enables publishing and subscribing to `INotification` messages between servic
 - 🔄 Publish/Subscribe model over RabbitMQ.
 - 💡 Built on top of `LightMediator.EventBus`.
 - 🔌 Easy integration with minimal configuration.
-- 🔒 Supports durable queues and automatic reconnects.
-- 🧩 Fully compatible with MediatR's `INotification`.
+- 🔒 Supports durable queues and automatic reconnects. 
 
 ## 📦 Installation
 
@@ -112,13 +111,6 @@ internal class TestEventHandler : NotificationHandler<TestEvent>
 ## 📝 License
 
 This project is licensed under the [MIT License](LICENSE).
-
-## 💬 Related Projects
-
-* [LightMediator](https://github.com/omidmloo/LightMediator)
-* [LightMediator.EventBus](https://github.com/omidmloo/LightMediator.EventBus)
-* [LightMediator.EventBus.SignalR](https://github.com/omidmloo/LightMediator.EventBus.SignalR)
-* [MassTransit](https://github.com/MassTransit/MassTransit)
 
 ---
 

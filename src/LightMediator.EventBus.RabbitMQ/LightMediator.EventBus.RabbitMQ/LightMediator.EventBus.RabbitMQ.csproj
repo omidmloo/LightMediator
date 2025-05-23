@@ -3,12 +3,12 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.5.1.11</Version>
+		<Version>0.5.1.12</Version>
 		<Authors>Mahmood Malekloo</Authors>
 		<Description>
 			RabbitMQ messaging service extension for lightmediator event bus
 		</Description>
-		<PackageTags>mediator;lightweight;signalr;eventbus;event-driven;windows-services;decoupled;microservices</PackageTags>
+		<PackageTags>mediator;lightweight;rabbitmq;eventbus;event-driven;windows-services;decoupled;microservices</PackageTags>
 		<PackageProjectUrl>https://github.com/omidmloo/LightMediator</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/omidmloo/LightMediator</RepositoryUrl>
 		<LicenseUrl>https://opensource.org/licenses/MIT</LicenseUrl>
@@ -16,6 +16,7 @@
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageReleaseNotes>
 			- fix rabbit mq fanout multi queue
+			- fix reference package versioning
 		</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<License>MIT</License>
@@ -35,10 +36,10 @@
 	</ItemGroup>
  
 	<ItemGroup>
-		<PackageReference Include="LightMediator.EventBus" Version="0.5.1.10" />
+		<PackageReference Include="LightMediator.EventBus" Version="[0.5.1.12,)"/>
 		<PackageReference Include="MassTransit" Version="8.4.1" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.4.1" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="[9.0.5,)" PrivateAssets="all"  />
 	</ItemGroup> 
 
 </Project>
