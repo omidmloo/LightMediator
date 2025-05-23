@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk"> 
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Version>0.5.1.10</Version>
+		<Authors>Mahmood Malekloo</Authors>
+		<Description>
+			RabbitMQ messaging service extension for lightmediator event bus
+		</Description>
+		<PackageTags>mediator;lightweight;signalr;eventbus;event-driven;windows-services;decoupled;microservices</PackageTags>
+		<PackageProjectUrl>https://github.com/omidmloo/LightMediator</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/omidmloo/LightMediator</RepositoryUrl>
+		<LicenseUrl>https://opensource.org/licenses/MIT</LicenseUrl>
+		<Icon>icon.png</Icon>
+		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+		<PackageReleaseNotes>
+			- add rabbitmq eventbus using masstransit
+		</PackageReleaseNotes>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<License>MIT</License>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<OutputPath>bin\Debug\</OutputPath>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<OutputPath>bin\Release\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="LICENSE" Pack="true" PackagePath="" />
+		<None Include="README.md" Pack="true" PackagePath="" />
+	</ItemGroup>
+ 
+	<ItemGroup>
+		<PackageReference Include="LightMediator.EventBus" Version="0.5.1.10" />
+		<PackageReference Include="MassTransit" Version="8.4.1" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="8.4.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
+	</ItemGroup> 
+
+</Project>
