@@ -80,7 +80,7 @@ internal class RabbitMQEventBus<TEvent> : ILightMediatorEventBus, IConsumer<TEve
         var eventMessage = new RabbitMQEvent(
             notification.GetType().Name.Split(".").Last(),
             JsonConvert.SerializeObject(notification),
-            Assembly.GetEntryAssembly().FullName
+            Assembly.GetEntryAssembly()!.FullName!
         );
 
         await publisher.PublishAsync(eventMessage);
