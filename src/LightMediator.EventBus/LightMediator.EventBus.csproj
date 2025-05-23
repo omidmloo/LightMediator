@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Version>0.5.1.10</Version>
+		<Authors>Mahmood Malekloo</Authors>
+		<Description>
+			EventBus capability to publish events between applications using different messaging systems
+		</Description>
+		<PackageTags>mediator;lightweight;eventbus;event-driven;windows-services;decoupled;microservices</PackageTags>
+		<PackageProjectUrl>https://github.com/omidmloo/LightMediator</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/omidmloo/LightMediator</RepositoryUrl>
+		<LicenseUrl>https://opensource.org/licenses/MIT</LicenseUrl>
+		<!-- Replace with your chosen license -->
+		<Icon>icon.png</Icon>
+		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+		<PackageReleaseNotes>
+			- Update readme and documentation
+			- correct project urls
+		</PackageReleaseNotes>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<License>MIT</License>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<OutputPath>bin\Debug\</OutputPath>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<OutputPath>bin\Release\</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+		<ProjectReference Include="..\LightMediator\LightMediator\LightMediator.csproj" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' == 'Release'"> 
+		<PackageReference Include="LightMediator" Version="0.5.1.3" />
+	</ItemGroup>
+	<ItemGroup> 
+		<None Include="LICENSE" Pack="true" PackagePath="" />
+		<None Include="README.md" Pack="true" PackagePath="" /> 
+	</ItemGroup> 
+</Project>
