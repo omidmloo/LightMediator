@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk"> 
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -6,17 +7,16 @@
 		<Version>0.5.1.12</Version>
 		<Authors>Mahmood Malekloo</Authors>
 		<Description>
-			RabbitMQ messaging service extension for lightmediator event bus
+			Azure Service Bus messaging service extension for lightmediator event bus
 		</Description>
-		<PackageTags>mediator;lightweight;rabbitmq;eventbus;event-driven;windows-services;decoupled;microservices</PackageTags>
+		<PackageTags>mediator;lightweight;azureservicebus;eventbus;event-driven;windows-services;decoupled;microservices</PackageTags>
 		<PackageProjectUrl>https://github.com/omidmloo/LightMediator</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/omidmloo/LightMediator</RepositoryUrl>
 		<LicenseUrl>https://opensource.org/licenses/MIT</LicenseUrl>
 		<Icon>icon.png</Icon>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageReleaseNotes>
-			- fix rabbit mq fanout multi queue
-			- fix reference package versioning
+			- Added AzureServiceBus messaging service
 		</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<License>MIT</License>
@@ -34,12 +34,11 @@
 		<None Include="LICENSE" Pack="true" PackagePath="" />
 		<None Include="README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
- 
-	<ItemGroup>
-		<PackageReference Include="LightMediator.EventBus" Version="[0.5.1.12,)"/>
-		<PackageReference Include="MassTransit" Version="8.4.1" />
-		<PackageReference Include="MassTransit.RabbitMQ" Version="8.4.1" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="[9.0.5,)" PrivateAssets="all"  />
+	<ItemGroup> 
+		
+		<PackageReference Include="LightMediator.EventBus" Version="[0.5.1.12,)"/>  
+		<PackageReference Include="MassTransit" Version="[8.4.1,)" />
+		<PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="[8.4.1,)"/>
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="[9.0.0,)" PrivateAssets="all" />
 	</ItemGroup> 
-
 </Project>

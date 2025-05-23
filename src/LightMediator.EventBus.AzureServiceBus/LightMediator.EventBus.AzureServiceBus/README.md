@@ -1,15 +1,15 @@
-﻿# LightMediator.EventBus.RabbitMQ
+﻿# LightMediator.EventBus.AzureServiceBus
 
-[![NuGet](https://img.shields.io/nuget/v/LightMediator.EventBus.RabbitMQ.svg)](https://www.nuget.org/packages/LightMediator.EventBus.RabbitMQ/)
+[![NuGet](https://img.shields.io/nuget/v/LightMediator.EventBus.AzureServiceBus.svg)](https://www.nuget.org/packages/LightMediator.EventBus.AzureServiceBus/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**LightMediator.EventBus.RabbitMQ** is an extension for [LightMediator](https://github.com/omidmloo/LightMediator) and [LightMediator.EventBus](https://github.com/omidmloo/LightMediator.EventBus) that adds distributed messaging support using RabbitMQ.
+**LightMediator.EventBus.AzureServiceBus** is an extension for [LightMediator](https://github.com/omidmloo/LightMediator) and LightMediator.EventBus that adds distributed messaging support using AzureServiceBus.
 
-It enables publishing and subscribing to `INotification` messages between services, applications, or domains in a decoupled and scalable way — powered by RabbitMQ and your high-performance, lightweight mediator.
+It enables publishing and subscribing to `INotification` messages between services, applications, or domains in a decoupled and scalable way — powered by AzureServiceBus and your high-performance, lightweight mediator.
 
 ## ✨ Features
 
-- 🔄 Publish/Subscribe model over RabbitMQ.
+- 🔄 Publish/Subscribe using Topic/Queue model over AzureServiceBus.
 - 💡 Built on top of `LightMediator.EventBus`.
 - 🔌 Easy integration with minimal configuration.
 - 🔒 Supports durable queues and automatic reconnects. 
@@ -19,18 +19,18 @@ It enables publishing and subscribing to `INotification` messages between servic
 Install via NuGet:
 
 ```bash
-dotnet add package LightMediator.EventBus.RabbitMQ
+dotnet add package LightMediator.EventBus.AzureServiceBus
 ````
 
 Or via the Package Manager:
 
 ```powershell
-Install-Package LightMediator.EventBus.RabbitMQ
+Install-Package LightMediator.EventBus.AzureServiceBus
 ```
 
 ## 🚀 Getting Started
 
-### 1. Register LightMediator with RabbitMQ support
+### 1. Register LightMediator with AzureServiceBus support
 
 In your `Program.cs` or `Startup.cs`:
 
@@ -51,12 +51,7 @@ builder.Services.AddLightMediator(options =>
     };
 
     options.AddLightMediatorEventBus(services)
-           .UseRabbitMQ(new RabbitMQSettings()
-             {
-                 HostUri = "rabbitmq://localhost",
-                 Username = "guest",
-                 Password = "guestpassword"
-             };
+           .UseAzureServiceBus(builder.Configuration.GetSection("AzureServiceBusSettings"));
 });
 ```
 
@@ -105,12 +100,12 @@ internal class TestEventHandler : NotificationHandler<TestEvent>
  await _mediator.PublishEvent(new TestEvent() { MyProperty = "Hello"});
 ```
 
-> The message will be delivered to all services that registered the same `ExchangeName` and are listening for that notification.
+> The message will be delivered to all services that registered the same `Topic` and are listening for that notification.
 
 
 ## 📝 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE). 
 
 ---
 
