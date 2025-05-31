@@ -65,7 +65,9 @@ internal class SignalREventBus : ILightMediatorEventBus, IHostedService
         {
             var signalREvent = JsonConvert.DeserializeObject<SignalREvent>(notificationMessage)
                                ?? throw new EventDeserializationException("Failed to deserialize SignalREvent.");
-
+            var currentAssembly = Assembly.GetEntryAssembly()?.FullName;
+            if (signalREvent.AssemblyName == null || signalREvent.AssemblyName == currentAssembly)
+                return;
             var t = _mediatorOptions.Assemblies.SelectMany(a => a.GetTypes())
                 .FirstOrDefault(t => t.IsClass && !t.IsAbstract && t.Name.EndsWith(signalREvent.TypeName, StringComparison.Ordinal));
             if (t == null)
@@ -101,7 +103,8 @@ internal class SignalREventBus : ILightMediatorEventBus, IHostedService
         {
             var eventMessage = new SignalREvent(
                 notification.GetType().Name.Split('.').Last(),
-                JsonConvert.SerializeObject(notification)
+                JsonConvert.SerializeObject(notification),
+                Assembly.GetEntryAssembly()!.ToString()
             );
 
             var serializedMessage = JsonConvert.SerializeObject(eventMessage);

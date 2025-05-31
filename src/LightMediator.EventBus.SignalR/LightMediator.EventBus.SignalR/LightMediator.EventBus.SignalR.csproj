@@ -4,7 +4,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.5.1.10</Version>
+		<Version>0.5.1.14</Version>
 		<Authors>Mahmood Malekloo</Authors>
 		<Description>
 			Signalr messaging service extension for lightmediator event bus
@@ -16,7 +16,8 @@
 		<Icon>icon.png</Icon>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 		<PackageReleaseNotes>
-			- fixed signalr connection state
+			- fix reference package versioning
+			- fix problem in getting events in publisher lib
 		</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<License>MIT</License>
@@ -47,3 +48,4 @@
 	</ItemGroup>
 
 </Project>
+

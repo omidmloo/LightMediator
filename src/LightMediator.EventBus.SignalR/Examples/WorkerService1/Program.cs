@@ -23,7 +23,7 @@ builder.Services.AddLightMediator(o =>
      .UseSignalRService(new SignalRSettings()
      {
          ServerAddress = "https://localhost:7223",
-     });
+     },ignoreUntrustedCertificate: true);
 });
 var host = builder.Build();
 host.Run();

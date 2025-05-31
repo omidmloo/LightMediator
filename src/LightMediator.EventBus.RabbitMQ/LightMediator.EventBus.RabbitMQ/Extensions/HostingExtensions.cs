@@ -12,7 +12,7 @@ public static class HostingExtensions
         if (configuration == null) throw new ArgumentNullException(nameof(configuration));
         if (string.IsNullOrWhiteSpace(rabbitMqSectionName)) throw new ArgumentException("RabbitMq section name is required.");
 
-        return UseRabbitMQ(serviceBusOptions, configuration.GetSection(rabbitMqSectionName));
+        return serviceBusOptions.UseRabbitMQ(configuration.GetSection(rabbitMqSectionName));
     }
 
    public static LightMediatorEventBusOptions UseRabbitMQ(
@@ -25,7 +25,7 @@ public static class HostingExtensions
         if (settings == null)
             throw new RabbitMQConfigurationException("RabbitMQ settings are invalid or missing.");
 
-        return UseRabbitMQ(serviceBusOptions, settings);
+        return serviceBusOptions.UseRabbitMQ(settings);
     }
 
     public static LightMediatorEventBusOptions UseRabbitMQ(

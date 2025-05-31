@@ -14,7 +14,7 @@ public static class HostingExtensions
         if (configuration == null) throw new ArgumentNullException(nameof(configuration));
         if (string.IsNullOrWhiteSpace(signalRSectionName)) throw new ArgumentException("SignalR section name is required.");
 
-        return UseSignalRService(serviceBusOptions, configuration.GetSection(signalRSectionName), ignoreUntrustedCertificate);
+        return serviceBusOptions.UseSignalRService(configuration.GetSection(signalRSectionName), ignoreUntrustedCertificate);
     }
 
     public static LightMediatorEventBusOptions UseSignalRService(
@@ -28,7 +28,7 @@ public static class HostingExtensions
         if (signalRSettings == null || string.IsNullOrWhiteSpace(signalRSettings.ServerAddress))
             throw new SignalRConfigurationException("SignalR settings are invalid or missing ServerAddress.");
 
-        return UseSignalRService(serviceBusOptions, signalRSettings, ignoreUntrustedCertificate);
+        return serviceBusOptions.UseSignalRService(signalRSettings, ignoreUntrustedCertificate);
     }
 
     public static LightMediatorEventBusOptions UseSignalRService(
