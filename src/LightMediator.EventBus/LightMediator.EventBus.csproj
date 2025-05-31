@@ -4,7 +4,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.5.1.10</Version>
+		<Version>0.5.1.12</Version>
 		<Authors>Mahmood Malekloo</Authors>
 		<Description>
 			EventBus capability to publish events between applications using different messaging systems
@@ -31,15 +31,10 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<OutputPath>bin\Release\</OutputPath>
-	</PropertyGroup>
-
-	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
-		<ProjectReference Include="..\LightMediator\LightMediator\LightMediator.csproj" />
-	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)' == 'Release'"> 
-		<PackageReference Include="LightMediator" Version="0.5.1.3" />
-	</ItemGroup>
+	</PropertyGroup> 
+	
 	<ItemGroup> 
+		<PackageReference Include="LightMediator" Version="[0.5.1.4,)" />
 		<None Include="LICENSE" Pack="true" PackagePath="" />
 		<None Include="README.md" Pack="true" PackagePath="" /> 
 	</ItemGroup> 

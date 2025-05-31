@@ -4,7 +4,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.5.1.3</Version>
+		<Version>0.5.1.4</Version>
 		<Authors>Mahmood Malekloo</Authors>
 		<Description>
 			LightMediator is a lightweight library for decoupled communication in Windows services. It simplifies communication between different namespaces, supports multiple notification types, and enables aggregation into a single service. Ideal for distributed and event-driven architectures.
@@ -15,9 +15,8 @@
 		<LicenseUrl>https://opensource.org/licenses/MIT</LicenseUrl> 
 		<Icon>icon.png</Icon>
 		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
-		<PackageReleaseNotes>
-			- Fix exception class reference
-			- update reference package versions
+		<PackageReleaseNotes> 
+			- fix reference package versions
 		</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<License>MIT</License>
@@ -31,10 +30,10 @@
 		<OutputPath>bin\Release\</OutputPath>
 	</PropertyGroup> 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.2" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[9.0.0,)"  />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[9.0.0,)"   />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[9.0.0,)"  />
+		<PackageReference Include="Newtonsoft.Json" Version="[13.0.1,)"  />
 	</ItemGroup> 
 	<ItemGroup>
 		<None Include="LICENSE" Pack="true" PackagePath="" />

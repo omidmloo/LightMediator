@@ -31,12 +31,8 @@ internal class RabbitMQEventBus<TEvent> : ILightMediatorEventBus, IConsumer<TEve
                                    ?? throw new EventDeserializationException("Failed to deserialize RabbitMQEvent.");
 
             var currentAssembly = Assembly.GetEntryAssembly()?.FullName;
-            if (rabbitMQEvent.AssemblyName == currentAssembly)
-            {
-                await context.Publish(context.Message);
-            }
-            else
-            {
+            if (rabbitMQEvent.AssemblyName != currentAssembly)
+            { 
                 await OnEventRecieved(textMessage, null);
             }
         }

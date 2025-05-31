@@ -5,9 +5,9 @@ namespace LightMediator.EventBus.AzureServiceBus;
 public static class HostingExtentions
 {
     public static LightMediatorEventBusOptions UseAzureServiceBus(
-       this LightMediatorEventBusOptions serviceBusOptions,
-       IConfiguration configuration,
-       string azureServiceBusSectionName)
+   this LightMediatorEventBusOptions serviceBusOptions,
+   IConfiguration configuration,
+   string azureServiceBusSectionName)
     {
         if (configuration == null) throw new ArgumentNullException(nameof(configuration));
         if (string.IsNullOrWhiteSpace(azureServiceBusSectionName)) throw new ArgumentException("AzureServiceBus section name is required.");
@@ -17,7 +17,7 @@ public static class HostingExtentions
 
     public static LightMediatorEventBusOptions UseAzureServiceBus(
          this LightMediatorEventBusOptions serviceBusOptions,
-        IConfigurationSection configurationSection)
+     IConfigurationSection configurationSection)
     {
         if (configurationSection == null) throw new ArgumentNullException(nameof(configurationSection));
 

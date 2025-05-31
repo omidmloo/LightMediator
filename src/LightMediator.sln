@@ -61,26 +61,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LightMediator.EventBus.Azur
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{A5B1A2DE-68D5-48F2-A114-E70E769E4291}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService1", "LightMediator.EventBus.AzureServiceBus\Examples\WorkerService1\WorkerService1.csproj", "{C615195A-833E-411C-9590-8C1696A8EBB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService2", "LightMediator.EventBus.AzureServiceBus\Examples\WorkerService2\WorkerService2.csproj", "{C997E838-B506-4D6D-9C15-290D63BDE0A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService3", "LightMediator.EventBus.AzureServiceBus\Examples\WorkerService3\WorkerService3.csproj", "{39F21DAD-198B-4A11-B33A-4B09D0BE1C1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightMediator.EventBus.AzureServiceBus", "LightMediator.EventBus.AzureServiceBus\LightMediator.EventBus.AzureServiceBus\LightMediator.EventBus.AzureServiceBus.csproj", "{DBB74EFC-FE74-4AA7-8B16-AFF337BCCA3F}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService3", "LightMediator.EventBus.RabbitMQ\Examples\WorkerService3\WorkerService3.csproj", "{3AC6984F-3ABC-4B1D-BB03-7CFA4DFC73B1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{244FA1D1-2E96-4001-A7AE-C36E9E275B2E}"
 	ProjectSection(SolutionItems) = preProject
 		..\README.md = ..\README.md
 	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LigthMediator.EventBus.MQTT", "LigthMediator.EventBus.MQTT", "{9D5BE88A-E4E7-4AC0-AF23-61982AB06A60}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightMediator.EventBus.MQTT", "LightMediator.EventBus.MQTT\LightMediator.EventBus.MQTT\LightMediator.EventBus.MQTT.csproj", "{ECE27B1B-BD32-4953-9BA2-DF5E07CAA45E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{64E36F03-8412-4FEC-A99E-F53CEC321443}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService1", "LightMediator.EventBus.MQTT\Examples\WorkerService1\WorkerService1.csproj", "{7074CFBA-E14F-4E60-9755-756E76380D1A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService2", "LightMediator.EventBus.MQTT\Examples\WorkerService2\WorkerService2.csproj", "{8F38FE3D-C548-4D4E-A47A-E373DF2276CC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService3", "LightMediator.EventBus.MQTT\Examples\WorkerService3\WorkerService3.csproj", "{EEDA9FD0-FFD9-4DA9-8415-A9C05E880F4B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{1A1D8B50-6639-41ED-8B45-6CDD5B2117EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

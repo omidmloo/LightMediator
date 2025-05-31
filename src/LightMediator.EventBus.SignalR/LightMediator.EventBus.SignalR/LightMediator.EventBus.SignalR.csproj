@@ -38,13 +38,13 @@
 		<None Include="README.md" Pack="true" PackagePath="" />
 	</ItemGroup> 
 	<ItemGroup>
-		<PackageReference Include="LightMediator.EventBus" Version="0.5.1.10" />
-		<PackageReference Include="Microsoft.AspNetCore.app" Version="2.2.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.2" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
+		<PackageReference Include="LightMediator.EventBus" Version="0.5.1.12" />
+		<PackageReference Include="Microsoft.AspNetCore.app" Version="[2.2.8,)"  PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="[2.3.0,)"  PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="[2.3.0,)"  PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="[1.2.0,)"  PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="[9.0.5,)" PrivateAssets="all"  />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="[9.0.5,)" PrivateAssets="all"  />
 	</ItemGroup>
 
 </Project>
