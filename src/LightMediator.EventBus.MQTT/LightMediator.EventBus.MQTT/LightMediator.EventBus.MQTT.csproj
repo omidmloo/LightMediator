@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	  <Version>0.5.2.1</Version>
+	  <Version>0.5.2.2</Version>
 	  <Authors>Mahmood Malekloo</Authors>
 	  <Description>
 		  MQTT messaging service extension for lightmediator event bus
@@ -16,7 +16,8 @@
 	  <Icon>icon.png</Icon>
 	  <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
 	  <PackageReleaseNotes>
-		  - add token info to update username in settings from tioken or somewehre elsee
+		  - fix mqtt reconnect logic
+		  - fix mqtt token change logic
 	  </PackageReleaseNotes>
 	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	  <License>MIT</License>

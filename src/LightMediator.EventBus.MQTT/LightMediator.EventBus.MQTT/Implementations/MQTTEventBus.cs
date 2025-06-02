@@ -15,6 +15,7 @@ internal class MQTTEventBus : IMQTTEventBus, IHostedService
     private readonly IServiceProvider _serviceProvider;
     private MqttClientOptions? _options;
     private EventBusConnectionState _clientState;
+     
 
     public MQTTEventBus(
         IMediator mediator,
@@ -148,14 +149,24 @@ internal class MQTTEventBus : IMQTTEventBus, IHostedService
             var mQTTTokenHandler = _serviceProvider.GetService<IMQTTTokenHandler>();
             if (mQTTTokenHandler == null)
                 throw new MQTTConfigurationException("No IMQTTTokenHandler registered");
-            var tokenInfo = await mQTTTokenHandler.GetTokenInfoAsync(async token =>
+            var tokenInfo = await mQTTTokenHandler.GetTokenInfoAsync(token =>
             {
-                if (_client.IsConnected)
-                    await _client.DisconnectAsync();
-
-                await BuildOptions();
-                _clientState = EventBusConnectionState.Reconncting;
-                await ConnectAsync(default);
+                if (OnTokenChanged == null)
+                    OnTokenChanged = async (token) =>
+                    {
+                        if (_client.IsConnected)
+                        {
+                            await _client.DisconnectAsync();
+                            _client.ConnectedAsync -= MqttConnected;
+                            _client.DisconnectedAsync -= MqttDisconnected;
+                            _client.ConnectingAsync -= MqttConnecting;
+                            _client.ApplicationMessageReceivedAsync -= MessageRecieved;
+                        }
+                        await BuildOptions();
+                        _clientState = EventBusConnectionState.Reconncting;
+                        await ConnectAsync(default);
+                    };
+                return OnTokenChanged(token);
             });
             if (tokenInfo != null)
             { 
@@ -177,6 +188,7 @@ internal class MQTTEventBus : IMQTTEventBus, IHostedService
         }
         _options = optionsBuilder.Build();
     }
+    Func<string, Task>? OnTokenChanged { get; set; }
     private async Task ConnectAsync(CancellationToken cancellationToken)
     {
         try
@@ -187,13 +199,15 @@ internal class MQTTEventBus : IMQTTEventBus, IHostedService
                 var delay = CalculateDelay(c);
                 await Task.Delay(delay, cancellationToken);
 
-                _logger.LogDebug("------------------------------------------Connecting to MQTT");
+                _logger.LogInformation("------------------------------------------Connecting to MQTT");
                 var res = await _client.ConnectAsync(_options, cancellationToken);
-                _logger.LogDebug($"_+_+_+_+_+_+_+_+_+__+_+_+_+_+_+_+_+ {res.ResultCode}");
+                _logger.LogInformation($"_+_+_+_+_+_+_+_+_+__+_+_+_+_+_+_+_+ {res.ResultCode}");
                 c++;
                 if (!_client.IsConnected)
                     continue;
-                _logger.LogDebug($"-----------------------MQTT Connected----------------------CLIENTID:{_settings.ClientId}");
+                _logger.LogInformation($"-----------------------MQTT Connected----------------------CLIENTID:{_settings.ClientId}");
+
+                
                 _client.ConnectedAsync += MqttConnected;
                 _client.DisconnectedAsync += MqttDisconnected;
                 _client.ConnectingAsync += MqttConnecting;
@@ -257,14 +271,14 @@ internal class MQTTEventBus : IMQTTEventBus, IHostedService
         }
         else
         {
-            _logger.LogDebug("Disconnected from MQTT broker.");
+            _logger.LogInformation("Disconnected from MQTT broker.");
             _clientState = EventBusConnectionState.Disconnected;
 
         }
     }
     private Task MqttConnected(MqttClientConnectedEventArgs args)
     {
-        _logger.LogDebug("Connected to MQTT broker.");
+        _logger.LogInformation("Connected to MQTT broker.");
         _clientState = EventBusConnectionState.Connected;
         return Task.CompletedTask;
     }
